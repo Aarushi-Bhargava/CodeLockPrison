@@ -8,7 +8,7 @@ import arcade
 
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
-SCREEN_TITLE = "Sprites and Periodic Bullets Example"
+SCREEN_TITLE = "Shooting Game Scratch Code Version"
 
 
 class EnemySprite(arcade.Sprite):
