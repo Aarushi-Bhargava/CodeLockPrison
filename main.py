@@ -8,7 +8,7 @@ import arcade
 
 SCREEN_WIDTH = 600
 SCREEN_HEIGHT = 600
-SCREEN_TITLE = "Escape from CodeLock Prison"
+SCREEN_TITLE = "Shooting Game Scratch Code Version (2)"
 
 
 class EnemySprite(arcade.Sprite):
