@@ -6,9 +6,9 @@ python -m arcade.examples.sprite_bullets_periodic
 """
 import arcade
 
-SCREEN_WIDTH = 800
+SCREEN_WIDTH = 600
 SCREEN_HEIGHT = 600
-SCREEN_TITLE = "Sprites and Periodic Bullets Example"
+SCREEN_TITLE = "Escape from CodeLock Prison"
 
 
 class EnemySprite(arcade.Sprite):
@@ -40,7 +40,7 @@ class EnemySprite(arcade.Sprite):
             self.time_since_last_firing = 0
 
             # Fire the bullet
-            bullet = arcade.Sprite(":resources:images/space_shooter/laserBlue01.png")
+            bullet = arcade.Sprite("CodeLockPrison/768px-Eo_circle_red_blank.svg.png", scale=0.05)
             bullet.center_x = self.center_x
             bullet.angle = -90
             bullet.top = self.bottom
@@ -69,12 +69,12 @@ class MyGame(arcade.Window):
         self.bullet_list = arcade.SpriteList()
 
         # Add player ship
-        self.player = arcade.Sprite(":resources:images/space_shooter/playerShip1_orange.png", 0.5)
+        self.player = arcade.Sprite("CodeLockPrison/images__2_-removebg-preview.png", scale=0.5)
         self.player_list.append(self.player)
 
         # Add top-left enemy ship
-        enemy = EnemySprite(":resources:images/space_shooter/playerShip1_green.png",
-                            scale=0.5,
+        enemy = EnemySprite("CodeLockPrison/600px-Piste_Scandinavia_3_red_rectangle.svg.png",
+                            scale=0.1,
                             bullet_list=self.bullet_list,
                             time_between_firing=2.0)
         enemy.center_x = 120
@@ -83,8 +83,8 @@ class MyGame(arcade.Window):
         self.enemy_list.append(enemy)
 
         # Add top-right enemy ship
-        enemy = EnemySprite(":resources:images/space_shooter/playerShip1_green.png",
-                            scale=0.5,
+        enemy = EnemySprite("CodeLockPrison/600px-Piste_Scandinavia_3_red_rectangle.svg.png",
+                            scale=0.1,
                             bullet_list=self.bullet_list,
                             time_between_firing=1.0)
         enemy.center_x = SCREEN_WIDTH - 120
