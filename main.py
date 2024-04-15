@@ -10,6 +10,7 @@ SCREEN_WIDTH = 600
 SCREEN_HEIGHT = 600
 SCREEN_TITLE = "Shooting Game Scratch Code Version (2)"
 
+PLAYER_MOVEMENT_SPEED = 5
 
 class EnemySprite(arcade.Sprite):
     """ Enemy ship class that tracks how long it has been since firing. """
@@ -61,12 +62,17 @@ class MyGame(arcade.Window):
         self.enemy_list = None
         self.bullet_list = None
 
+        self.wall_list = None
+
+        self.physics_engine = None
+
     def setup(self):
         """ Setup the variables for the game. """
 
         self.player_list = arcade.SpriteList()
         self.enemy_list = arcade.SpriteList()
         self.bullet_list = arcade.SpriteList()
+        self.wall_list = arcade.SpriteList()
 
         # Add player ship
         self.player = arcade.Sprite("CodeLockPrison/images__2_-removebg-preview.png", scale=0.5)
@@ -92,6 +98,20 @@ class MyGame(arcade.Window):
         enemy.angle = 180
         self.enemy_list.append(enemy)
 
+        coordinate_list = [[512, 96], [256, 96], [768, 96]]
+
+        for coordinate in coordinate_list:
+            # Add a crate on the ground
+            wall = arcade.Sprite(
+                "CodeLockPrison/600px-Piste_Scandinavia_3_red_rectangle.svg.png", 0.01
+            )
+            wall.position = coordinate
+            self.wall_list.append(wall)
+
+        self.physics_engine = arcade.PhysicsEngineSimple(
+            self.player, self.wall_list
+        )
+
     def on_draw(self):
         """Render the screen. """
 
@@ -114,12 +134,42 @@ class MyGame(arcade.Window):
 
         self.bullet_list.update()
 
-    def on_mouse_motion(self, x, y, delta_x, delta_y):
-        """
-        Called whenever the mouse moves.
-        """
-        self.player.center_x = x
-        self.player.center_y = 20
+    # def on_mouse_motion(self, x, y, delta_x, delta_y):
+    #     """
+    #     Called whenever the mouse moves.
+    #     """
+    #     self.player.center_x = x
+    #     self.player.center_y = 20
+
+    def on_key_press(self, key, modifiers):
+        """Called whenever a key is pressed."""
+
+        if key == arcade.key.UP or key == arcade.key.W:
+            self.player.change_y = PLAYER_MOVEMENT_SPEED
+        elif key == arcade.key.DOWN or key == arcade.key.S:
+            self.player.change_y = -PLAYER_MOVEMENT_SPEED
+        elif key == arcade.key.LEFT or key == arcade.key.A:
+            self.player.change_x = -PLAYER_MOVEMENT_SPEED
+        elif key == arcade.key.RIGHT or key == arcade.key.D:
+            self.player.change_x = PLAYER_MOVEMENT_SPEED
+
+    def on_key_release(self, key, modifiers):
+        """Called when the user releases a key."""
+
+        if key == arcade.key.UP or key == arcade.key.W:
+            self.player.change_y = 0
+        elif key == arcade.key.DOWN or key == arcade.key.S:
+            self.player.change_y = 0
+        elif key == arcade.key.LEFT or key == arcade.key.A:
+            self.player.change_x = 0
+        elif key == arcade.key.RIGHT or key == arcade.key.D:
+            self.player.change_x = 0
+
+    def on_update(self, delta_time):
+        """Movement and game logic"""
+
+        # Move the player with the physics engine
+        self.physics_engine.update()
 
 
 def main():
