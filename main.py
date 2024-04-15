@@ -8,7 +8,7 @@ import arcade
 
 SCREEN_WIDTH = 600
 SCREEN_HEIGHT = 600
-SCREEN_TITLE = "Shooting Game d"
+SCREEN_TITLE = "Shooting Game Renamed"
 
 
 class EnemySprite(arcade.Sprite):
