@@ -98,15 +98,13 @@ class MyGame(arcade.Window):
         enemy.angle = 180
         self.enemy_list.append(enemy)
 
-        coordinate_list = [[512, 96], [256, 96], [768, 96]]
 
-        for coordinate in coordinate_list:
-            # Add a crate on the ground
-            wall = arcade.Sprite(
-                "CodeLockPrison/600px-Piste_Scandinavia_3_red_rectangle.svg.png", 0.01
-            )
-            wall.position = coordinate
-            self.wall_list.append(wall)
+        # Add a crate on the ground
+        wall = arcade.Sprite(
+            "CodeLockPrison/600px-Piste_Scandinavia_3_red_rectangle.svg.png", 1
+        )
+        wall.position = [-100,-500]
+        self.wall_list.append(wall)
 
         self.physics_engine = arcade.PhysicsEngineSimple(
             self.player, self.wall_list
@@ -131,8 +129,14 @@ class MyGame(arcade.Window):
         for bullet in self.bullet_list:
             if bullet.top < 0:
                 bullet.remove_from_sprite_lists()
-
+        
         self.bullet_list.update()
+        
+        """Movement and game logic"""
+
+        # Move the player with the physics engine
+        self.physics_engine.update()
+
 
     # def on_mouse_motion(self, x, y, delta_x, delta_y):
     #     """
@@ -144,32 +148,18 @@ class MyGame(arcade.Window):
     def on_key_press(self, key, modifiers):
         """Called whenever a key is pressed."""
 
-        if key == arcade.key.UP or key == arcade.key.W:
-            self.player.change_y = PLAYER_MOVEMENT_SPEED
-        elif key == arcade.key.DOWN or key == arcade.key.S:
-            self.player.change_y = -PLAYER_MOVEMENT_SPEED
-        elif key == arcade.key.LEFT or key == arcade.key.A:
+        if key == arcade.key.LEFT:
             self.player.change_x = -PLAYER_MOVEMENT_SPEED
-        elif key == arcade.key.RIGHT or key == arcade.key.D:
+        elif key == arcade.key.RIGHT:
             self.player.change_x = PLAYER_MOVEMENT_SPEED
 
     def on_key_release(self, key, modifiers):
         """Called when the user releases a key."""
 
-        if key == arcade.key.UP or key == arcade.key.W:
-            self.player.change_y = 0
-        elif key == arcade.key.DOWN or key == arcade.key.S:
-            self.player.change_y = 0
-        elif key == arcade.key.LEFT or key == arcade.key.A:
+        if key == arcade.key.LEFT:
             self.player.change_x = 0
-        elif key == arcade.key.RIGHT or key == arcade.key.D:
+        elif key == arcade.key.RIGHT:
             self.player.change_x = 0
-
-    def on_update(self, delta_time):
-        """Movement and game logic"""
-
-        # Move the player with the physics engine
-        self.physics_engine.update()
 
 
 def main():
