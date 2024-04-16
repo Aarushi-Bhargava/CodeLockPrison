@@ -10,6 +10,7 @@ SCREEN_WIDTH = 600
 SCREEN_HEIGHT = 600
 SCREEN_TITLE = "Shooting Game Renamed"
 
+PLAYER_MOVEMENT_SPEED = 5
 
 
 class EnemySprite(arcade.Sprite):
@@ -62,12 +63,17 @@ class MyGame(arcade.Window):
         self.enemy_list = None
         self.bullet_list = None
 
+        self.wall_list = None
+
+        self.physics_engine = None
+
     def setup(self):
         """ Setup the variables for the game. """
 
         self.player_list = arcade.SpriteList()
         self.enemy_list = arcade.SpriteList()
         self.bullet_list = arcade.SpriteList()
+        self.wall_list = arcade.SpriteList()
 
         # Add player ship
         self.player = arcade.Sprite("CodeLockPrison/images__2_-removebg-preview.png", scale=0.5)
@@ -77,21 +83,22 @@ class MyGame(arcade.Window):
         enemy = EnemySprite("CodeLockPrison/600px-Piste_Scandinavia_3_red_rectangle.svg.png",
                             scale=0.1,
                             bullet_list=self.bullet_list,
-                            time_between_firing=2.0)
-        enemy.center_x = 120
+                            time_between_firing=1.0)
+        enemy.center_x = SCREEN_WIDTH/2
         enemy.center_y = SCREEN_HEIGHT - enemy.height
         enemy.angle = 180
         self.enemy_list.append(enemy)
 
-        # Add top-right enemy ship
-        enemy = EnemySprite("CodeLockPrison/600px-Piste_Scandinavia_3_red_rectangle.svg.png",
-                            scale=0.1,
-                            bullet_list=self.bullet_list,
-                            time_between_firing=1.0)
-        enemy.center_x = SCREEN_WIDTH - 120
-        enemy.center_y = SCREEN_HEIGHT - enemy.height
-        enemy.angle = 180
-        self.enemy_list.append(enemy)
+        # Add a crate on the ground
+        wall = arcade.Sprite(
+            "CodeLockPrison/600px-Piste_Scandinavia_3_red_rectangle.svg.png", 1
+        )
+        wall.position = [-100,-500]
+        self.wall_list.append(wall)
+
+        self.physics_engine = arcade.PhysicsEngineSimple(
+            self.player, self.wall_list
+        )
 
     def on_draw(self):
         """Render the screen. """
@@ -112,15 +119,42 @@ class MyGame(arcade.Window):
         for bullet in self.bullet_list:
             if bullet.top < 0:
                 bullet.remove_from_sprite_lists()
-
+        
         self.bullet_list.update()
 
-    def on_mouse_motion(self, x, y, delta_x, delta_y):
-        """
-        Called whenever the mouse moves.
-        """
-        self.player.center_x = x
-        self.player.center_y = 20
+        """Movement and game logic"""
+
+        # Keep player in the center 
+        if self.player.center_x < 0:
+            self.player.center_x = 0
+        elif self.player.center_x > SCREEN_WIDTH:
+            self.player.center_x = SCREEN_WIDTH
+
+        self.physics_engine.update()
+
+
+    # def on_mouse_motion(self, x, y, delta_x, delta_y):
+    #     """
+    #     Called whenever the mouse moves.
+    #     """
+    #     self.player.center_x = x
+    #     self.player.center_y = 20
+
+    def on_key_press(self, key, modifiers):
+        """Called whenever a key is pressed."""
+
+        if key == arcade.key.LEFT:
+            self.player.change_x = -PLAYER_MOVEMENT_SPEED
+        elif key == arcade.key.RIGHT:
+            self.player.change_x = PLAYER_MOVEMENT_SPEED
+
+    def on_key_release(self, key, modifiers):
+        """Called when the user releases a key."""
+
+        if key == arcade.key.LEFT:
+            self.player.change_x = 0
+        elif key == arcade.key.RIGHT:
+            self.player.change_x = 0
 
 
 def main():
