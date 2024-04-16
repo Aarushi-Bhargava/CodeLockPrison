@@ -82,22 +82,11 @@ class MyGame(arcade.Window):
         enemy = EnemySprite("CodeLockPrison/600px-Piste_Scandinavia_3_red_rectangle.svg.png",
                             scale=0.1,
                             bullet_list=self.bullet_list,
-                            time_between_firing=2.0)
-        enemy.center_x = 120
-        enemy.center_y = SCREEN_HEIGHT - enemy.height
-        enemy.angle = 180
-        self.enemy_list.append(enemy)
-
-        # Add top-right enemy ship
-        enemy = EnemySprite("CodeLockPrison/600px-Piste_Scandinavia_3_red_rectangle.svg.png",
-                            scale=0.1,
-                            bullet_list=self.bullet_list,
                             time_between_firing=1.0)
-        enemy.center_x = SCREEN_WIDTH - 120
+        enemy.center_x = SCREEN_WIDTH/2
         enemy.center_y = SCREEN_HEIGHT - enemy.height
         enemy.angle = 180
         self.enemy_list.append(enemy)
-
 
         # Add a crate on the ground
         wall = arcade.Sprite(
@@ -134,12 +123,12 @@ class MyGame(arcade.Window):
 
         """Movement and game logic"""
 
-        # Move the player with the physics engine
+        # Keep player in the center 
         if self.player.center_x < 0:
             self.player.center_x = 0
-        elif self.player.center_x > 600:
-            self.player.center_x = 600
-            
+        elif self.player.center_x > SCREEN_WIDTH:
+            self.player.center_x = SCREEN_WIDTH
+
         self.physics_engine.update()
 
 
