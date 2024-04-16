@@ -11,6 +11,7 @@ SCREEN_HEIGHT = 600
 SCREEN_TITLE = "Shooting Game Renamed"
 
 
+
 class EnemySprite(arcade.Sprite):
     """ Enemy ship class that tracks how long it has been since firing. """
 
