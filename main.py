@@ -131,10 +131,15 @@ class MyGame(arcade.Window):
                 bullet.remove_from_sprite_lists()
         
         self.bullet_list.update()
-        
+
         """Movement and game logic"""
 
         # Move the player with the physics engine
+        if self.player.center_x < 0:
+            self.player.center_x = 0
+        elif self.player.center_x > 600:
+            self.player.center_x = 600
+            
         self.physics_engine.update()
 
 
