@@ -72,10 +72,9 @@ class MyGame(arcade.Window):
         self.player_list = None
         self.enemy_list = None
         self.bullet_list = None
-
         self.wall_list = None
-
         self.physics_engine = None
+        self.health = None
 
     def setup(self):
         """ Setup the variables for the game. """
@@ -84,6 +83,15 @@ class MyGame(arcade.Window):
         self.enemy_list = arcade.SpriteList()
         self.bullet_list = arcade.SpriteList()
         self.wall_list = arcade.SpriteList()
+        self.health_list = arcade.SpriteList()
+
+        #Add healthbar
+        for i in range(0, 101, 50):
+            self.health = arcade.Sprite("CodeLockPrison/768px-Eo_circle_red_blank.svg.png", scale=0.04)
+            self.health.center_x = self.health.width
+            self.health.center_y = SCREEN_HEIGHT/2 + i
+            
+            self.health_list.append(self.health)
 
         # Add player ship
         self.player = arcade.Sprite("CodeLockPrison/images__2_-removebg-preview.png", scale=0.3)
@@ -116,21 +124,33 @@ class MyGame(arcade.Window):
         """Render the screen. """
 
         self.clear()
-
+        
         self.enemy_list.draw()
         self.bullet_list.draw()
         self.player_list.draw()
+        self.health_list.draw()
+
+        if len(self.health_list) <= 0:
+            arcade.draw_text("Game Over", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, arcade.color.WHITE, font_size=50, anchor_x="center")
 
     def on_update(self, delta_time):
         """ All the logic to move, and the game logic goes here. """
 
         self.enemy_list.on_update(delta_time)
 
+        bullet_hit = arcade.check_for_collision_with_list(
+            self.player, self.bullet_list
+        )      
+
         # Get rid of the bullet when it flies off-screen
         for bullet in self.bullet_list:
             if bullet.top < 0:
-                bullet.remove_from_sprite_lists()
-
+                bullet.remove_from_sprite_lists() 
+            if bullet in bullet_hit:
+                if len(self.health_list) > 0:
+                    self.health_list[0].remove_from_sprite_lists()
+                bullet.remove_from_sprite_lists()          
+       
         self.bullet_list.update()
         self.player_list.update()
 
