@@ -134,6 +134,12 @@ class MyGame(arcade.Window):
         self.bullet_list.update()
         self.player_list.update()
 
+        # Constrain the player to stay within the screen boundaries
+        if self.player.left < 0:
+            self.player.left = 0
+        if self.player.right > SCREEN_WIDTH:
+            self.player.right = SCREEN_WIDTH
+
         self.physics_engine.update()
 
     def on_key_press(self, key, modifiers):
