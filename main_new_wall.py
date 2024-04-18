@@ -180,8 +180,8 @@ class MyGame(arcade.Window):
                             min_time_between_firing=0.5,  # Minimum time between shots
                             max_time_between_firing=2.0,  # Maximum time between shots
                             movement_speed=2,
-                            boundary_left=50,
-                            boundary_right=SCREEN_WIDTH - 50)
+                            boundary_left=0,
+                            boundary_right=SCREEN_WIDTH)
         enemy.center_x = SCREEN_WIDTH / 2
         enemy.center_y = SCREEN_HEIGHT - enemy.height
         enemy.angle = 180
