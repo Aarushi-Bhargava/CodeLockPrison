@@ -1,16 +1,7 @@
-"""
-Show how to have enemies shoot bullets at regular intervals.
-
-If Python and Arcade are installed, this example can be run from the command line with:
-python -m arcade.examples.sprite_bullets_periodic
-"""
+#importer libraries
 import arcade
 import random
 import arcade.gui
-
-# SCREEN_WIDTH = 600
-# SCREEN_HEIGHT = 600
-# SCREEN_TITLE = "Shooting Game Renamed"
 
 PLAYER_MOVEMENT_SPEED = 5
 
@@ -20,6 +11,7 @@ SCREEN_TITLE = "Shooting Game Scratch Code Version (2)"
 SPRITE_SIZE = 64
 SPRITE_SCALING = 0.5
 
+#Seperating different screens into rooms that the player could switch between (hacking, battle, etc)
 class Room:
     """
     This class holds all the information about the
@@ -33,7 +25,7 @@ class Room:
         # background images, you can delete this part.
         self.background = None
 
-
+#Room 1 => this code is the basic setup for every room you would create
 def setup_room_1():
     """
     Create and return room 1.
@@ -51,7 +43,7 @@ def setup_room_1():
 
     return room
 
-
+#Room 2 => basic setup
 def setup_room_2():
     """
     Create and return room 2.
@@ -59,10 +51,12 @@ def setup_room_2():
     room = Room()
     room.wall_list = arcade.SpriteList()
 
+    # Load the background image for this level.
     room.background = arcade.load_texture(":resources:images/backgrounds/abstract_2.jpg")
 
     return room
 
+#Prison guards
 class EnemySprite(arcade.Sprite):
     """ Enemy ship class that tracks how long it has been since firing and moves left and right.
     It fires at random intervals. """
@@ -101,6 +95,7 @@ class EnemySprite(arcade.Sprite):
         """ Fire a bullet and reset the firing timer to a random interval. """
         self.time_since_last_firing = 0
         self.time_between_firing = random.uniform(self.min_time_between_firing, self.max_time_between_firing)
+        #bullet image
         bullet = arcade.Sprite("CodeLockPrison/768px-Eo_circle_red_blank.svg.png", scale=0.04)
         bullet.center_x = self.center_x
         bullet.angle = -90
@@ -108,13 +103,14 @@ class EnemySprite(arcade.Sprite):
         bullet.change_y = -2
         self.bullet_list.append(bullet)
 
-
+#Setting up the arcade window where video game is displayed
 class MyGame(arcade.Window):
     """ Main application class """
 
     def __init__(self):
         super().__init__(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
 
+        
         arcade.set_background_color(arcade.color.BLACK)
 
         self.player = None
@@ -194,7 +190,7 @@ class MyGame(arcade.Window):
 
         self.physics_engine = arcade.PhysicsEngineSimple(self.player, self.wall_list)
 
-        #ADDED CODE HERE
+
          # Our list of rooms
         self.rooms = []
 
