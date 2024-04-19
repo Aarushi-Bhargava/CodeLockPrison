@@ -120,7 +120,8 @@ class MyGame(arcade.Window):
         self.wall_list = None
         self.physics_engine = None
         self.health = None
-
+        self.bullet_num = 0
+        self.play_mode = 0
         
         #button start here
         self.manager = arcade.gui.UIManager()
@@ -231,7 +232,12 @@ class MyGame(arcade.Window):
             self.health_list.draw()
 
             if len(self.health_list) <= 0:
+                self.play_mode = 1
                 arcade.draw_text("Game Over", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, arcade.color.WHITE, font_size=50, anchor_x="center")
+            elif self.bullet_num > 25:
+                self.play_mode = 1
+                arcade.draw_text("Congrats! You won!", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, arcade.color.WHITE, font_size=50, anchor_x="center")
+
         
         if self.current_room == 0:
             self.manager.draw()
@@ -244,11 +250,11 @@ class MyGame(arcade.Window):
         bullet_hit = arcade.check_for_collision_with_list(
             self.player, self.bullet_list
         )      
-
         # Get rid of the bullet when it flies off-screen
         for bullet in self.bullet_list:
             if bullet.top < 0:
                 bullet.remove_from_sprite_lists() 
+                self.bullet_num += 1
             if bullet in bullet_hit:
                 if len(self.health_list) > 0:
                     self.health_list[0].remove_from_sprite_lists()
@@ -268,16 +274,18 @@ class MyGame(arcade.Window):
     def on_key_press(self, key, modifiers):
         """Called whenever a key is pressed."""
 
-        if key == arcade.key.LEFT:
-            self.player.change_x = -PLAYER_MOVEMENT_SPEED
-        elif key == arcade.key.RIGHT:
-            self.player.change_x = PLAYER_MOVEMENT_SPEED
+        if self.play_mode == 0:
+            if key == arcade.key.LEFT:
+                self.player.change_x = -PLAYER_MOVEMENT_SPEED
+            elif key == arcade.key.RIGHT:
+                self.player.change_x = PLAYER_MOVEMENT_SPEED
 
     def on_key_release(self, key, modifiers):
         """Called when the user releases a key."""
 
-        if key == arcade.key.LEFT or key == arcade.key.RIGHT:
-            self.player.change_x = 0
+        if self.play_mode == 0:
+            if key == arcade.key.LEFT or key == arcade.key.RIGHT:
+                self.player.change_x = 0
 
 
 def main():
