@@ -5,7 +5,7 @@ import arcade.gui
 
 PLAYER_MOVEMENT_SPEED = 5
 
-SCREEN_WIDTH = 600
+SCREEN_WIDTH = 1000
 SCREEN_HEIGHT = 600
 SCREEN_TITLE = "Shooting Game Scratch Code Version (2)"
 SPRITE_SIZE = 64
@@ -52,7 +52,7 @@ def setup_room_2():
     room.wall_list = arcade.SpriteList()
 
     # Load the background image for this level.
-    room.background = arcade.load_texture(":resources:images/backgrounds/abstract_2.jpg")
+    room.background = arcade.load_texture("CodeLockPrison\combat screen.jpg")
 
     return room
 

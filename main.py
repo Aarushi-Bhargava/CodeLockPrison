@@ -1,19 +1,61 @@
-"""
-Show how to have enemies shoot bullets at regular intervals.
-
-If Python and Arcade are installed, this example can be run from the command line with:
-python -m arcade.examples.sprite_bullets_periodic
-"""
+#importer libraries
 import arcade
 import random
-
-SCREEN_WIDTH = 600
-SCREEN_HEIGHT = 600
-SCREEN_TITLE = "Shooting Game Renamed"
+import arcade.gui
 
 PLAYER_MOVEMENT_SPEED = 5
 
+SCREEN_WIDTH = 1000
+SCREEN_HEIGHT = 600
+SCREEN_TITLE = "Shooting Game Scratch Code Version (2)"
+SPRITE_SIZE = 64
+SPRITE_SCALING = 0.5
 
+#Seperating different screens into rooms that the player could switch between (hacking, battle, etc)
+class Room:
+    """
+    This class holds all the information about the
+    different rooms.
+    """
+    def __init__(self):
+        # You may want many lists. Lists for coins, monsters, etc.
+        self.wall_list = None
+
+        # This holds the background images. If you don't want changing
+        # background images, you can delete this part.
+        self.background = None
+
+#Room 1 => this code is the basic setup for every room you would create
+def setup_room_1():
+    """
+    Create and return room 1.
+    If your program gets large, you may want to separate this into different
+    files.
+    """
+    room = Room()
+
+    room.wall_list = arcade.SpriteList()
+
+
+    # Load the background image for this level.
+    room.background = arcade.load_texture("CodeLockPrison\!!.png")
+
+    return room
+
+#Room 2 => basic setup
+def setup_room_2():
+    """
+    Create and return room 2.
+    """
+    room = Room()
+    room.wall_list = arcade.SpriteList()
+
+    # Load the background image for this level.
+    room.background = arcade.load_texture("CodeLockPrison\combat screen (background).jpg")
+
+    return room
+
+#Prison guards
 class EnemySprite(arcade.Sprite):
     """ Enemy ship class that tracks how long it has been since firing and moves left and right.
     It fires at random intervals. """
@@ -52,6 +94,7 @@ class EnemySprite(arcade.Sprite):
         """ Fire a bullet and reset the firing timer to a random interval. """
         self.time_since_last_firing = 0
         self.time_between_firing = random.uniform(self.min_time_between_firing, self.max_time_between_firing)
+        #bullet image
         bullet = arcade.Sprite("CodeLockPrison/768px-Eo_circle_red_blank.svg.png", scale=0.04)
         bullet.center_x = self.center_x
         bullet.angle = -90
@@ -59,13 +102,14 @@ class EnemySprite(arcade.Sprite):
         bullet.change_y = -2
         self.bullet_list.append(bullet)
 
-
+#Setting up the arcade window where video game is displayed
 class MyGame(arcade.Window):
     """ Main application class """
 
     def __init__(self):
         super().__init__(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
 
+        
         arcade.set_background_color(arcade.color.BLACK)
 
         self.player = None
@@ -75,6 +119,32 @@ class MyGame(arcade.Window):
         self.wall_list = None
         self.physics_engine = None
         self.health = None
+        self.bullet_num = 0
+        self.play_mode = 0
+        
+        #button start here
+        self.manager = arcade.gui.UIManager()
+        self.manager.enable()
+        self.v_box = arcade.gui.UIBoxLayout()
+
+
+        start_button = arcade.gui.UIFlatButton(text="Start Game", width=200, height=100)
+        start_button.on_click = self.swap_screens
+        self.v_box.add(start_button.with_space_around(bottom=20))
+
+
+        self.manager.add(
+            arcade.gui.UIAnchorWidget(
+                anchor_x="center_x",
+                anchor_y="center_y",
+                child=self.v_box
+            )
+        )
+        #button end here\
+    
+    #swap screen upon click
+    def swap_screens(self, event):
+        self.current_room = 1
 
     def setup(self):
         """ Setup the variables for the game. """
@@ -106,8 +176,8 @@ class MyGame(arcade.Window):
                             min_time_between_firing=0.5,  # Minimum time between shots
                             max_time_between_firing=2.0,  # Maximum time between shots
                             movement_speed=2,
-                            boundary_left=50,
-                            boundary_right=SCREEN_WIDTH - 50)
+                            boundary_left=0,
+                            boundary_right=SCREEN_WIDTH)
         enemy.center_x = SCREEN_WIDTH / 2
         enemy.center_y = SCREEN_HEIGHT - enemy.height
         enemy.angle = 180
@@ -120,18 +190,56 @@ class MyGame(arcade.Window):
 
         self.physics_engine = arcade.PhysicsEngineSimple(self.player, self.wall_list)
 
+
+         # Our list of rooms
+        self.rooms = []
+
+        # Sprite lists
+        self.current_room = 0
+
+        # Create the rooms. Extend the pattern for each room.
+        room = setup_room_1()
+        self.rooms.append(room)
+
+        room = setup_room_2()
+        self.rooms.append(room)
+
+        # Our starting room number
+        self.current_room = 0
+
+        # Create a physics engine for this room
+        self.physics_engine = arcade.PhysicsEngineSimple(self.player,
+                                                         self.rooms[self.current_room].wall_list)
+
     def on_draw(self):
         """Render the screen. """
 
         self.clear()
-        
-        self.enemy_list.draw()
-        self.bullet_list.draw()
-        self.player_list.draw()
-        self.health_list.draw()
 
-        if len(self.health_list) <= 0:
-            arcade.draw_text("Game Over", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, arcade.color.WHITE, font_size=50, anchor_x="center")
+        
+
+        arcade.draw_lrwh_rectangle_textured(0, 0,
+                                            SCREEN_WIDTH, SCREEN_HEIGHT,
+                                            self.rooms[self.current_room].background)
+
+        # # Draw all the walls in this room
+        self.rooms[self.current_room].wall_list.draw()
+        if self.current_room == 1:
+            self.enemy_list.draw()
+            self.bullet_list.draw()
+            self.player_list.draw()
+            self.health_list.draw()
+
+            if len(self.health_list) <= 0:
+                self.play_mode = 1
+                arcade.draw_text("Game Over", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, arcade.color.WHITE, font_size=50, anchor_x="center")
+            elif self.bullet_num > 25:
+                self.play_mode = 1
+                arcade.draw_text("Congrats! You won!", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, arcade.color.WHITE, font_size=50, anchor_x="center")
+
+        
+        if self.current_room == 0:
+            self.manager.draw()
 
     def on_update(self, delta_time):
         """ All the logic to move, and the game logic goes here. """
@@ -141,11 +249,11 @@ class MyGame(arcade.Window):
         bullet_hit = arcade.check_for_collision_with_list(
             self.player, self.bullet_list
         )      
-
         # Get rid of the bullet when it flies off-screen
         for bullet in self.bullet_list:
             if bullet.top < 0:
                 bullet.remove_from_sprite_lists() 
+                self.bullet_num += 1
             if bullet in bullet_hit:
                 if len(self.health_list) > 0:
                     self.health_list[0].remove_from_sprite_lists()
@@ -165,16 +273,18 @@ class MyGame(arcade.Window):
     def on_key_press(self, key, modifiers):
         """Called whenever a key is pressed."""
 
-        if key == arcade.key.LEFT:
-            self.player.change_x = -PLAYER_MOVEMENT_SPEED
-        elif key == arcade.key.RIGHT:
-            self.player.change_x = PLAYER_MOVEMENT_SPEED
+        if self.play_mode == 0:
+            if key == arcade.key.LEFT:
+                self.player.change_x = -PLAYER_MOVEMENT_SPEED
+            elif key == arcade.key.RIGHT:
+                self.player.change_x = PLAYER_MOVEMENT_SPEED
 
     def on_key_release(self, key, modifiers):
         """Called when the user releases a key."""
 
-        if key == arcade.key.LEFT or key == arcade.key.RIGHT:
-            self.player.change_x = 0
+        if self.play_mode == 0:
+            if key == arcade.key.LEFT or key == arcade.key.RIGHT:
+                self.player.change_x = 0
 
 
 def main():
