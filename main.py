@@ -38,7 +38,7 @@ def setup_room_1():
 
 
     # Load the background image for this level.
-    room.background = arcade.load_texture("CodeLockPrison\!!.png")
+    room.background = arcade.load_texture("!!.png")
 
     return room
 
@@ -51,7 +51,7 @@ def setup_room_2():
     room.wall_list = arcade.SpriteList()
 
     # Load the background image for this level.
-    room.background = arcade.load_texture("CodeLockPrison\combat screen (background).jpg")
+    room.background = arcade.load_texture("combat screen (background).jpg")
 
     return room
 
@@ -95,7 +95,7 @@ class EnemySprite(arcade.Sprite):
         self.time_since_last_firing = 0
         self.time_between_firing = random.uniform(self.min_time_between_firing, self.max_time_between_firing)
         #bullet image
-        bullet = arcade.Sprite("CodeLockPrison/768px-Eo_circle_red_blank.svg.png", scale=0.04)
+        bullet = arcade.Sprite("768px-Eo_circle_red_blank.svg.png", scale=0.04)
         bullet.center_x = self.center_x
         bullet.angle = -90
         bullet.top = self.bottom
@@ -127,8 +127,8 @@ class MyGame(arcade.Window):
         self.manager.enable()
         self.v_box = arcade.gui.UIBoxLayout()
 
-
-        start_button = arcade.gui.UIFlatButton(text="Start Game", width=200, height=100)
+        # start_button = arcade.gui.UIFlatButton(text="Start Game", width=200, height=100)
+        start_button = arcade.gui.UITextureButton(x=0, y=0, texture=arcade.load_texture('play-button-neww.png'))
         start_button.on_click = self.swap_screens
         self.v_box.add(start_button.with_space_around(bottom=20))
 
@@ -157,20 +157,20 @@ class MyGame(arcade.Window):
 
         #Add healthbar
         for i in range(0, 101, 50):
-            self.health = arcade.Sprite("CodeLockPrison/768px-Eo_circle_red_blank.svg.png", scale=0.04)
+            self.health = arcade.Sprite("768px-Eo_circle_red_blank.svg.png", scale=0.04)
             self.health.center_x = self.health.width
             self.health.center_y = SCREEN_HEIGHT/2 + i
             
             self.health_list.append(self.health)
 
         # Add player ship
-        self.player = arcade.Sprite("CodeLockPrison/images__2_-removebg-preview.png", scale=0.3)
+        self.player = arcade.Sprite("images__2_-removebg-preview.png", scale=0.3)
         self.player.center_x = SCREEN_WIDTH / 2
         self.player.center_y = 50
         self.player_list.append(self.player)
 
         # Add top-left enemy ship
-        enemy = EnemySprite("CodeLockPrison/600px-Piste_Scandinavia_3_red_rectangle.svg.png",
+        enemy = EnemySprite("600px-Piste_Scandinavia_3_red_rectangle.svg.png",
                             scale=0.1,
                             bullet_list=self.bullet_list,
                             min_time_between_firing=0.5,  # Minimum time between shots
@@ -184,7 +184,7 @@ class MyGame(arcade.Window):
         self.enemy_list.append(enemy)
 
         # Add a crate on the ground (not visible, example placeholder)
-        wall = arcade.Sprite("CodeLockPrison/600px-Piste_Scandinavia_3_red_rectangle.svg.png", scale=1)
+        wall = arcade.Sprite("600px-Piste_Scandinavia_3_red_rectangle.svg.png", scale=1)
         wall.position = [-100, -500]
         self.wall_list.append(wall)
 
