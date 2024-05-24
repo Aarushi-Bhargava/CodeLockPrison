@@ -67,7 +67,7 @@ class MyGameView(arcade.View):
         # self.background = None
         arcade.set_background_color(arcade.color.BLACK)
         self.button = None
-        self.button_list = None
+        # self.button_list = None
 
 
     def setup(self):
@@ -93,7 +93,68 @@ class MyGameView(arcade.View):
             view = CombatView()
             view.setup()
             self.window.show_view(view)
+
+class CombatGameOver(arcade.View):
+    def __init__(self):
+        super().__init__()
+        self.menu = None
+        self.menu_list = None
+
+    def setup(self):
+        self.background = arcade.load_texture("CodeLockPrison\combat screen (background).jpg")
+        
+        self.menu_list = arcade.SpriteList()
+        self.menu = arcade.Sprite("CodeLockPrison\menu icon.png", scale=1)
+        self.menu.center_x = SCREEN_WIDTH / 2
+        self.menu.center_y = SCREEN_HEIGHT / 2 + 100
+        self.menu_list.append(self.menu)
+
+
+    def on_draw(self):
+        self.clear()
+        arcade.draw_lrwh_rectangle_textured(0, 0,
+                                    SCREEN_WIDTH, SCREEN_HEIGHT,
+                                    self.background)
+        arcade.draw_text("Game Over", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, arcade.color.WHITE, font_size=50, anchor_x="center")
+        self.menu_list.draw()
     
+    def on_mouse_press(self, x, y, button, key_modifiers):
+        buttons = arcade.get_sprites_at_point((x,y), self.menu_list)
+        if len(buttons) > 0:
+            view = MyGameView()
+            view.setup()
+            self.window.show_view(view)
+
+class CombatWinView(arcade.View):
+    def __init__(self):
+        super().__init__()
+        self.menu = None
+        self.menu_list = None
+
+    def setup(self):
+        self.background = arcade.load_texture("CodeLockPrison\combat screen (background).jpg")
+        
+        self.menu_list = arcade.SpriteList()
+        self.menu = arcade.Sprite("CodeLockPrison\menu icon.png", scale=1)
+        self.menu.center_x = SCREEN_WIDTH / 2
+        self.menu.center_y = SCREEN_HEIGHT / 2 + 100
+        self.menu_list.append(self.menu)
+
+
+    def on_draw(self):
+        self.clear()
+        arcade.draw_lrwh_rectangle_textured(0, 0,
+                                    SCREEN_WIDTH, SCREEN_HEIGHT,
+                                    self.background)
+        arcade.draw_text("You Win!", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, arcade.color.WHITE, font_size=50, anchor_x="center")
+        self.menu_list.draw()
+    
+    def on_mouse_press(self, x, y, button, key_modifiers):
+        buttons = arcade.get_sprites_at_point((x,y), self.menu_list)
+        if len(buttons) > 0:
+            view = MyGameView()
+            view.setup()
+            self.window.show_view(view)
 
 class CombatView(arcade.View):
     """ Main application class """
@@ -114,14 +175,6 @@ class CombatView(arcade.View):
         self.bullet_num = 0
         self.play_mode = 0
       
-
-    def on_show_view(self):
-        """ This is run once when we switch to this view """
-        arcade.set_background_color(arcade.csscolor.DARK_SLATE_BLUE)
-
-        # Reset the viewport, necessary if we have a scrolling game and we need
-        # to reset the viewport back to the start so we can see what we draw.
-        arcade.set_viewport(0, self.window.width, 0, self.window.height)
 
     def setup(self):
         """ Setup the variables for the game. """
@@ -187,11 +240,14 @@ class CombatView(arcade.View):
         self.health_list.draw()
 
         if len(self.health_list) <= 0:
-            self.play_mode = 1
-            arcade.draw_text("Game Over", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, arcade.color.WHITE, font_size=50, anchor_x="center")
+            # self.play_mode = 1
+            view = CombatGameOver()
+            view.setup()
+            self.window.show_view(view)
         elif self.bullet_num > 25:
-            self.play_mode = 1
-            arcade.draw_text("Congrats! You won!", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, arcade.color.WHITE, font_size=50, anchor_x="center")
+            view = CombatWinView()
+            view.setup()
+            self.window.show_view(view)
 
     
 
