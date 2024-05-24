@@ -11,50 +11,6 @@ SCREEN_TITLE = "Shooting Game Scratch Code Version (2)"
 SPRITE_SIZE = 64
 SPRITE_SCALING = 0.5
 
-#Seperating different screens into rooms that the player could switch between (hacking, battle, etc)
-class Room:
-    """
-    This class holds all the information about the
-    different rooms.
-    """
-    def __init__(self):
-        # You may want many lists. Lists for coins, monsters, etc.
-        self.wall_list = None
-
-        # This holds the background images. If you don't want changing
-        # background images, you can delete this part.
-        self.background = None
-
-#Room 1 => this code is the basic setup for every room you would create
-def setup_room_1():
-    """
-    Create and return room 1.
-    If your program gets large, you may want to separate this into different
-    files.
-    """
-    room = Room()
-
-    room.wall_list = arcade.SpriteList()
-
-
-    # Load the background image for this level.
-    room.background = arcade.load_texture("!!.png")
-
-    return room
-
-#Room 2 => basic setup
-def setup_room_2():
-    """
-    Create and return room 2.
-    """
-    room = Room()
-    room.wall_list = arcade.SpriteList()
-
-    # Load the background image for this level.
-    room.background = arcade.load_texture("combat screen (background).jpg")
-
-    return room
-
 #Prison guards
 class EnemySprite(arcade.Sprite):
     """ Enemy ship class that tracks how long it has been since firing and moves left and right.
@@ -95,7 +51,7 @@ class EnemySprite(arcade.Sprite):
         self.time_since_last_firing = 0
         self.time_between_firing = random.uniform(self.min_time_between_firing, self.max_time_between_firing)
         #bullet image
-        bullet = arcade.Sprite("768px-Eo_circle_red_blank.svg.png", scale=0.04)
+        bullet = arcade.Sprite("CodeLockPrison/768px-Eo_circle_red_blank.svg.png", scale=0.04)
         bullet.center_x = self.center_x
         bullet.angle = -90
         bullet.top = self.bottom
@@ -103,11 +59,108 @@ class EnemySprite(arcade.Sprite):
         self.bullet_list.append(bullet)
 
 #Setting up the arcade window where video game is displayed
-class MyGame(arcade.Window):
+
+class MyGameView(arcade.View):
+    def __init__(self):
+        super().__init__()
+
+        # self.background = None
+        arcade.set_background_color(arcade.color.BLACK)
+        self.button = None
+        # self.button_list = None
+
+
+    def setup(self):
+        self.background = arcade.load_texture("CodeLockPrison/final-welcome-screen-green.png")
+        self.button_list = arcade.SpriteList()
+        self.button = arcade.Sprite("CodeLockPrison/play-button-neww.png")
+        self.button.center_x = SCREEN_WIDTH / 2
+        self.button.center_y = SCREEN_HEIGHT/2
+        self.button_list.append(self.button)
+    
+    
+    def on_draw(self):
+        self.clear()
+
+        arcade.draw_lrwh_rectangle_textured(0, 0,
+                                            SCREEN_WIDTH, SCREEN_HEIGHT,
+                                            self.background)
+        self.button_list.draw()
+    
+    def on_mouse_press(self, x, y, button, key_modifiers):
+        buttons = arcade.get_sprites_at_point((x,y), self.button_list)
+        if len(buttons) > 0:
+            view = CombatView()
+            view.setup()
+            self.window.show_view(view)
+
+class CombatGameOver(arcade.View):
+    def __init__(self):
+        super().__init__()
+        self.menu = None
+        self.menu_list = None
+
+    def setup(self):
+        self.background = arcade.load_texture("CodeLockPrison\combat screen (background).jpg")
+        
+        self.menu_list = arcade.SpriteList()
+        self.menu = arcade.Sprite("CodeLockPrison\menu icon.png", scale=1)
+        self.menu.center_x = SCREEN_WIDTH / 2
+        self.menu.center_y = SCREEN_HEIGHT / 2 + 100
+        self.menu_list.append(self.menu)
+
+
+    def on_draw(self):
+        self.clear()
+        arcade.draw_lrwh_rectangle_textured(0, 0,
+                                    SCREEN_WIDTH, SCREEN_HEIGHT,
+                                    self.background)
+        arcade.draw_text("Game Over", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, arcade.color.WHITE, font_size=50, anchor_x="center")
+        self.menu_list.draw()
+    
+    def on_mouse_press(self, x, y, button, key_modifiers):
+        buttons = arcade.get_sprites_at_point((x,y), self.menu_list)
+        if len(buttons) > 0:
+            view = MyGameView()
+            view.setup()
+            self.window.show_view(view)
+
+class CombatWinView(arcade.View):
+    def __init__(self):
+        super().__init__()
+        self.menu = None
+        self.menu_list = None
+
+    def setup(self):
+        self.background = arcade.load_texture("CodeLockPrison\combat screen (background).jpg")
+        
+        self.menu_list = arcade.SpriteList()
+        self.menu = arcade.Sprite("CodeLockPrison\menu icon.png", scale=1)
+        self.menu.center_x = SCREEN_WIDTH / 2
+        self.menu.center_y = SCREEN_HEIGHT / 2 + 100
+        self.menu_list.append(self.menu)
+
+
+    def on_draw(self):
+        self.clear()
+        arcade.draw_lrwh_rectangle_textured(0, 0,
+                                    SCREEN_WIDTH, SCREEN_HEIGHT,
+                                    self.background)
+        arcade.draw_text("You Win!", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, arcade.color.WHITE, font_size=50, anchor_x="center")
+        self.menu_list.draw()
+    
+    def on_mouse_press(self, x, y, button, key_modifiers):
+        buttons = arcade.get_sprites_at_point((x,y), self.menu_list)
+        if len(buttons) > 0:
+            view = MyGameView()
+            view.setup()
+            self.window.show_view(view)
+
+class CombatView(arcade.View):
     """ Main application class """
 
     def __init__(self):
-        super().__init__(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
+        super().__init__()
 
         
         arcade.set_background_color(arcade.color.BLACK)
@@ -121,33 +174,12 @@ class MyGame(arcade.Window):
         self.health = None
         self.bullet_num = 0
         self.play_mode = 0
-        
-        #button start here
-        self.manager = arcade.gui.UIManager()
-        self.manager.enable()
-        self.v_box = arcade.gui.UIBoxLayout()
-
-        # start_button = arcade.gui.UIFlatButton(text="Start Game", width=200, height=100)
-        start_button = arcade.gui.UITextureButton(x=0, y=0, texture=arcade.load_texture('play-button-neww.png'))
-        start_button.on_click = self.swap_screens
-        self.v_box.add(start_button.with_space_around(bottom=20))
-
-
-        self.manager.add(
-            arcade.gui.UIAnchorWidget(
-                anchor_x="center_x",
-                anchor_y="center_y",
-                child=self.v_box
-            )
-        )
-        #button end here\
-    
-    #swap screen upon click
-    def swap_screens(self, event):
-        self.current_room = 1
+      
 
     def setup(self):
         """ Setup the variables for the game. """
+
+        self.background = arcade.load_texture("CodeLockPrison\combat screen (background).jpg")
 
         self.player_list = arcade.SpriteList()
         self.enemy_list = arcade.SpriteList()
@@ -157,20 +189,20 @@ class MyGame(arcade.Window):
 
         #Add healthbar
         for i in range(0, 101, 50):
-            self.health = arcade.Sprite("768px-Eo_circle_red_blank.svg.png", scale=0.04)
+            self.health = arcade.Sprite("CodeLockPrison/768px-Eo_circle_red_blank.svg.png", scale=0.04)
             self.health.center_x = self.health.width
             self.health.center_y = SCREEN_HEIGHT/2 + i
             
             self.health_list.append(self.health)
 
         # Add player ship
-        self.player = arcade.Sprite("images__2_-removebg-preview.png", scale=0.3)
+        self.player = arcade.Sprite("CodeLockPrison/images__2_-removebg-preview.png", scale=0.3)
         self.player.center_x = SCREEN_WIDTH / 2
         self.player.center_y = 50
         self.player_list.append(self.player)
 
         # Add top-left enemy ship
-        enemy = EnemySprite("600px-Piste_Scandinavia_3_red_rectangle.svg.png",
+        enemy = EnemySprite("CodeLockPrison/600px-Piste_Scandinavia_3_red_rectangle.svg.png",
                             scale=0.1,
                             bullet_list=self.bullet_list,
                             min_time_between_firing=0.5,  # Minimum time between shots
@@ -184,32 +216,12 @@ class MyGame(arcade.Window):
         self.enemy_list.append(enemy)
 
         # Add a crate on the ground (not visible, example placeholder)
-        wall = arcade.Sprite("600px-Piste_Scandinavia_3_red_rectangle.svg.png", scale=1)
+        wall = arcade.Sprite("CodeLockPrison/600px-Piste_Scandinavia_3_red_rectangle.svg.png", scale=1)
         wall.position = [-100, -500]
         self.wall_list.append(wall)
 
         self.physics_engine = arcade.PhysicsEngineSimple(self.player, self.wall_list)
 
-
-         # Our list of rooms
-        self.rooms = []
-
-        # Sprite lists
-        self.current_room = 0
-
-        # Create the rooms. Extend the pattern for each room.
-        room = setup_room_1()
-        self.rooms.append(room)
-
-        room = setup_room_2()
-        self.rooms.append(room)
-
-        # Our starting room number
-        self.current_room = 0
-
-        # Create a physics engine for this room
-        self.physics_engine = arcade.PhysicsEngineSimple(self.player,
-                                                         self.rooms[self.current_room].wall_list)
 
     def on_draw(self):
         """Render the screen. """
@@ -220,26 +232,24 @@ class MyGame(arcade.Window):
 
         arcade.draw_lrwh_rectangle_textured(0, 0,
                                             SCREEN_WIDTH, SCREEN_HEIGHT,
-                                            self.rooms[self.current_room].background)
+                                            self.background)
 
-        # # Draw all the walls in this room
-        self.rooms[self.current_room].wall_list.draw()
-        if self.current_room == 1:
-            self.enemy_list.draw()
-            self.bullet_list.draw()
-            self.player_list.draw()
-            self.health_list.draw()
+        self.enemy_list.draw()
+        self.bullet_list.draw()
+        self.player_list.draw()
+        self.health_list.draw()
 
-            if len(self.health_list) <= 0:
-                self.play_mode = 1
-                arcade.draw_text("Game Over", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, arcade.color.WHITE, font_size=50, anchor_x="center")
-            elif self.bullet_num > 25:
-                self.play_mode = 1
-                arcade.draw_text("Congrats! You won!", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, arcade.color.WHITE, font_size=50, anchor_x="center")
+        if len(self.health_list) <= 0:
+            # self.play_mode = 1
+            view = CombatGameOver()
+            view.setup()
+            self.window.show_view(view)
+        elif self.bullet_num > 25:
+            view = CombatWinView()
+            view.setup()
+            self.window.show_view(view)
 
-        
-        if self.current_room == 0:
-            self.manager.draw()
+    
 
     def on_update(self, delta_time):
         """ All the logic to move, and the game logic goes here. """
@@ -289,8 +299,10 @@ class MyGame(arcade.Window):
 
 def main():
     """ Run the game """
-    window = MyGame()
-    window.setup()
+    window = arcade.Window(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
+    start_view = MyGameView()
+    window.show_view(start_view)
+    start_view.setup()
     arcade.run()
 
 
