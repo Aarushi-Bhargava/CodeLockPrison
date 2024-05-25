@@ -90,9 +90,85 @@ class MyGameView(arcade.View):
     def on_mouse_press(self, x, y, button, key_modifiers):
         buttons = arcade.get_sprites_at_point((x,y), self.button_list)
         if len(buttons) > 0:
+            view = LevelOneView()
+            view.setup()
+            self.window.show_view(view)
+
+class LevelOneView(arcade.View):
+    def __init__(self):
+        super().__init__()
+        self.computer = None
+        self.computer_list = None
+
+        self.guard = None
+        self.guard_list = None
+
+    def setup(self):
+        self.background = arcade.load_texture("CodeLockPrison\level 1 (bare).jpg")
+        
+        self.computer_list = arcade.SpriteList()
+        self.computer = arcade.Sprite("CodeLockPrison\IMG_3729.PNG", scale=1)
+        self.computer.center_x = SCREEN_WIDTH / 2
+        self.computer.center_y = SCREEN_HEIGHT / 2 + 100
+        self.computer_list.append(self.computer)
+
+        self.guard_list = arcade.SpriteList()
+        self.guard = arcade.Sprite("CodeLockPrison\Idle.PNG", scale=0.3)
+        self.guard.center_x = SCREEN_WIDTH / 2 + 200
+        self.guard.center_y = SCREEN_HEIGHT / 2 + 100
+        self.guard_list.append(self.guard)
+
+    def on_draw(self):
+        self.clear()
+        arcade.draw_lrwh_rectangle_textured(0, 0,
+                                    SCREEN_WIDTH, SCREEN_HEIGHT,
+                                    self.background)
+        self.computer_list.draw()
+        self.guard_list.draw()
+
+    def on_mouse_press(self, x, y, button, key_modifiers):
+        combat = arcade.get_sprites_at_point((x,y), self.guard_list)
+        if len(combat) > 0:
             view = CombatView()
             view.setup()
             self.window.show_view(view)
+        hacking = arcade.get_sprites_at_point((x,y), self.computer_list)
+        if len(hacking) > 0:
+            view = HackingView()
+            view.setup()
+            self.window.show_view(view)
+
+
+class HackingView(arcade.View):
+    def __init__(self):
+        super().__init__()
+        self.menu = None
+        self.menu_list = None
+
+    def setup(self):
+        self.background = arcade.load_texture("CodeLockPrison\IMG_3707.PNG")
+        
+        self.menu_list = arcade.SpriteList()
+        self.menu = arcade.Sprite("CodeLockPrison\menu icon.png", scale=1)
+        self.menu.center_x = SCREEN_WIDTH / 2
+        self.menu.center_y = SCREEN_HEIGHT / 2 + 100
+        self.menu_list.append(self.menu)
+
+
+    def on_draw(self):
+        self.clear()
+        arcade.draw_lrwh_rectangle_textured(0, 0,
+                                    SCREEN_WIDTH, SCREEN_HEIGHT,
+                                    self.background)
+        self.menu_list.draw()
+    
+    def on_mouse_press(self, x, y, button, key_modifiers):
+        buttons = arcade.get_sprites_at_point((x,y), self.menu_list)
+        if len(buttons) > 0:
+            view = LevelOneView()
+            view.setup()
+            self.window.show_view(view)
+
 
 class CombatGameOver(arcade.View):
     def __init__(self):
@@ -121,7 +197,7 @@ class CombatGameOver(arcade.View):
     def on_mouse_press(self, x, y, button, key_modifiers):
         buttons = arcade.get_sprites_at_point((x,y), self.menu_list)
         if len(buttons) > 0:
-            view = MyGameView()
+            view = LevelOneView()
             view.setup()
             self.window.show_view(view)
 
@@ -152,7 +228,7 @@ class CombatWinView(arcade.View):
     def on_mouse_press(self, x, y, button, key_modifiers):
         buttons = arcade.get_sprites_at_point((x,y), self.menu_list)
         if len(buttons) > 0:
-            view = MyGameView()
+            view = LevelOneView()
             view.setup()
             self.window.show_view(view)
 
