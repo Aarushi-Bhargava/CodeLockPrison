@@ -51,7 +51,7 @@ class EnemySprite(arcade.Sprite):
         self.time_since_last_firing = 0
         self.time_between_firing = random.uniform(self.min_time_between_firing, self.max_time_between_firing)
         #bullet image
-        bullet = arcade.Sprite("CodeLockPrisonGraphics/768px-Eo_circle_red_blank.svg.png", scale=0.04)
+        bullet = arcade.Sprite("CodeLockPrison/768px-Eo_circle_red_blank.svg.png", scale=0.04)
         bullet.center_x = self.center_x
         bullet.angle = -90
         bullet.top = self.bottom
@@ -71,9 +71,9 @@ class MyGameView(arcade.View):
 
 
     def setup(self):
-        self.background = arcade.load_texture("CodeLockPrisonGraphics/home screen.png")
+        self.background = arcade.load_texture("CodeLockPrison/home screen.png")
         self.button_list = arcade.SpriteList()
-        self.button = arcade.Sprite("CodeLockPrisonGraphics/play-button-neww.png")
+        self.button = arcade.Sprite("CodeLockPrison/play-button-neww.png")
         self.button.center_x = SCREEN_WIDTH / 2
         self.button.center_y = SCREEN_HEIGHT/2
         self.button_list.append(self.button)
@@ -104,16 +104,16 @@ class LevelOneView(arcade.View):
         self.guard_list = None
 
     def setup(self):
-        self.background = arcade.load_texture("CodeLockPrisonGraphics/level 1 (bare).jpg")
+        self.background = arcade.load_texture("CodeLockPrison/level 1 (bare).jpg")
         
         self.computer_list = arcade.SpriteList()
-        self.computer = arcade.Sprite("CodeLockPrisonGraphics/IMG_3729.PNG", scale=1)
+        self.computer = arcade.Sprite("CodeLockPrison/IMG_3729.PNG", scale=1)
         self.computer.center_x = SCREEN_WIDTH / 2
         self.computer.center_y = SCREEN_HEIGHT / 2 + 100
         self.computer_list.append(self.computer)
 
         self.guard_list = arcade.SpriteList()
-        self.guard = arcade.Sprite("CodeLockPrisonGraphics/Idle.PNG", scale=0.3)
+        self.guard = arcade.Sprite("CodeLockPrison/Idle.PNG", scale=0.3)
         self.guard.center_x = SCREEN_WIDTH / 2 + 200
         self.guard.center_y = SCREEN_HEIGHT / 2 + 100
         self.guard_list.append(self.guard)
@@ -146,10 +146,10 @@ class HackingView(arcade.View):
         self.menu_list = None
 
     def setup(self):
-        self.background = arcade.load_texture("CodeLockPrisonGraphics/IMG_3707.PNG")
+        self.background = arcade.load_texture("CodeLockPrison/IMG_3707.PNG")
         
         self.menu_list = arcade.SpriteList()
-        self.menu = arcade.Sprite("CodeLockPrisonGraphics/menu icon.png", scale=1)
+        self.menu = arcade.Sprite("CodeLockPrison/menu icon.png", scale=1)
         self.menu.center_x = SCREEN_WIDTH / 2
         self.menu.center_y = SCREEN_HEIGHT / 2 + 100
         self.menu_list.append(self.menu)
@@ -177,10 +177,10 @@ class CombatGameOver(arcade.View):
         self.menu_list = None
 
     def setup(self):
-        self.background = arcade.load_texture("CodeLockPrisonGraphics/combat screen (background).jpg")
+        self.background = arcade.load_texture("CodeLockPrison/combat screen (background).jpg")
         
         self.menu_list = arcade.SpriteList()
-        self.menu = arcade.Sprite("CodeLockPrisonGraphics/menu icon.png", scale=1)
+        self.menu = arcade.Sprite("CodeLockPrison/menu icon.png", scale=1)
         self.menu.center_x = SCREEN_WIDTH / 2
         self.menu.center_y = SCREEN_HEIGHT / 2 + 100
         self.menu_list.append(self.menu)
@@ -208,10 +208,10 @@ class CombatWinView(arcade.View):
         self.menu_list = None
 
     def setup(self):
-        self.background = arcade.load_texture("CodeLockPrisonGraphics/combat screen (background).jpg")
+        self.background = arcade.load_texture("CodeLockPrison/combat screen (background).jpg")
         
         self.menu_list = arcade.SpriteList()
-        self.menu = arcade.Sprite("CodeLockPrisonGraphics/menu icon.png", scale=1)
+        self.menu = arcade.Sprite("CodeLockPrison/menu icon.png", scale=1)
         self.menu.center_x = SCREEN_WIDTH / 2
         self.menu.center_y = SCREEN_HEIGHT / 2 + 100
         self.menu_list.append(self.menu)
@@ -255,7 +255,7 @@ class CombatView(arcade.View):
     def setup(self):
         """ Setup the variables for the game. """
 
-        self.background = arcade.load_texture("CodeLockPrisonGraphics/combat screen (background).jpg")
+        self.background = arcade.load_texture("CodeLockPrison/combat screen (background).jpg")
 
         self.player_list = arcade.SpriteList()
         self.enemy_list = arcade.SpriteList()
@@ -265,20 +265,20 @@ class CombatView(arcade.View):
 
         #Add healthbar
         for i in range(0, 101, 50):
-            self.health = arcade.Sprite("CodeLockPrisonGraphics/heart (single).png", scale=0.5)
+            self.health = arcade.Sprite("CodeLockPrison/heart (single).png", scale=0.5)
             self.health.center_x = 70
             self.health.center_y = 140 + i
             
             self.health_list.append(self.health)
 
         # Add player ship
-        self.player = arcade.Sprite("CodeLockPrisonGraphics/images__2_-removebg-preview.png", scale=0.3)
+        self.player = arcade.Sprite("CodeLockPrison/images__2_-removebg-preview.png", scale=0.3)
         self.player.center_x = SCREEN_WIDTH / 2
         self.player.center_y = 50
         self.player_list.append(self.player)
 
         # Add top-left enemy ship
-        enemy = EnemySprite("CodeLockPrisonGraphics/600px-Piste_Scandinavia_3_red_rectangle.svg.png",
+        enemy = EnemySprite("CodeLockPrison/600px-Piste_Scandinavia_3_red_rectangle.svg.png",
                             scale=0.1,
                             bullet_list=self.bullet_list,
                             min_time_between_firing=0.5,  # Minimum time between shots
@@ -292,7 +292,7 @@ class CombatView(arcade.View):
         self.enemy_list.append(enemy)
 
         # Add a crate on the ground (not visible, example placeholder)
-        wall = arcade.Sprite("CodeLockPrisonGraphics/600px-Piste_Scandinavia_3_red_rectangle.svg.png", scale=1)
+        wall = arcade.Sprite("CodeLockPrison/600px-Piste_Scandinavia_3_red_rectangle.svg.png", scale=1)
         wall.position = [-100, -500]
         self.wall_list.append(wall)
 
