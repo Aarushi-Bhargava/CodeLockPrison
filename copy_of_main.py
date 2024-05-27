@@ -345,7 +345,7 @@ class CombatView(arcade.View):
             view = CombatWinView()
             view.setup()
             self.window.show_view(view)
-
+ 
     
 
     def on_update(self, delta_time):

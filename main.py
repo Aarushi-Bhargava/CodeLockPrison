@@ -71,7 +71,7 @@ class MyGameView(arcade.View):
 
 
     def setup(self):
-        self.background = arcade.load_texture("CodeLockPrison/final-welcome-screen-green.png")
+        self.background = arcade.load_texture("CodeLockPrison/home screen.png")
         self.button_list = arcade.SpriteList()
         self.button = arcade.Sprite("CodeLockPrison/play-button-neww.png")
         self.button.center_x = SCREEN_WIDTH / 2
@@ -104,16 +104,16 @@ class LevelOneView(arcade.View):
         self.guard_list = None
 
     def setup(self):
-        self.background = arcade.load_texture("CodeLockPrison\level 1 (bare).jpg")
+        self.background = arcade.load_texture("CodeLockPrison/level 1 (bare).jpg")
         
         self.computer_list = arcade.SpriteList()
-        self.computer = arcade.Sprite("CodeLockPrison\IMG_3729.PNG", scale=1)
+        self.computer = arcade.Sprite("CodeLockPrison/IMG_3729.PNG", scale=1)
         self.computer.center_x = SCREEN_WIDTH / 2
         self.computer.center_y = SCREEN_HEIGHT / 2 + 100
         self.computer_list.append(self.computer)
 
         self.guard_list = arcade.SpriteList()
-        self.guard = arcade.Sprite("CodeLockPrison\Idle.PNG", scale=0.3)
+        self.guard = arcade.Sprite("CodeLockPrison/Idle.PNG", scale=0.3)
         self.guard.center_x = SCREEN_WIDTH / 2 + 200
         self.guard.center_y = SCREEN_HEIGHT / 2 + 100
         self.guard_list.append(self.guard)
@@ -146,10 +146,10 @@ class HackingView(arcade.View):
         self.menu_list = None
 
     def setup(self):
-        self.background = arcade.load_texture("CodeLockPrison\IMG_3707.PNG")
+        self.background = arcade.load_texture("CodeLockPrison/IMG_3707.PNG")
         
         self.menu_list = arcade.SpriteList()
-        self.menu = arcade.Sprite("CodeLockPrison\menu icon.png", scale=1)
+        self.menu = arcade.Sprite("CodeLockPrison/menu icon.png", scale=1)
         self.menu.center_x = SCREEN_WIDTH / 2
         self.menu.center_y = SCREEN_HEIGHT / 2 + 100
         self.menu_list.append(self.menu)
@@ -177,10 +177,10 @@ class CombatGameOver(arcade.View):
         self.menu_list = None
 
     def setup(self):
-        self.background = arcade.load_texture("CodeLockPrison\combat screen (background).jpg")
+        self.background = arcade.load_texture("CodeLockPrison/combat screen (background).jpg")
         
         self.menu_list = arcade.SpriteList()
-        self.menu = arcade.Sprite("CodeLockPrison\menu icon.png", scale=1)
+        self.menu = arcade.Sprite("CodeLockPrison/menu icon.png", scale=1)
         self.menu.center_x = SCREEN_WIDTH / 2
         self.menu.center_y = SCREEN_HEIGHT / 2 + 100
         self.menu_list.append(self.menu)
@@ -208,10 +208,10 @@ class CombatWinView(arcade.View):
         self.menu_list = None
 
     def setup(self):
-        self.background = arcade.load_texture("CodeLockPrison\combat screen (background).jpg")
+        self.background = arcade.load_texture("CodeLockPrison/combat screen (background).jpg")
         
         self.menu_list = arcade.SpriteList()
-        self.menu = arcade.Sprite("CodeLockPrison\menu icon.png", scale=1)
+        self.menu = arcade.Sprite("CodeLockPrison/menu icon.png", scale=1)
         self.menu.center_x = SCREEN_WIDTH / 2
         self.menu.center_y = SCREEN_HEIGHT / 2 + 100
         self.menu_list.append(self.menu)
@@ -255,7 +255,7 @@ class CombatView(arcade.View):
     def setup(self):
         """ Setup the variables for the game. """
 
-        self.background = arcade.load_texture("CodeLockPrison\combat screen (background).jpg")
+        self.background = arcade.load_texture("CodeLockPrison/combat screen (background).jpg")
 
         self.player_list = arcade.SpriteList()
         self.enemy_list = arcade.SpriteList()
@@ -265,9 +265,9 @@ class CombatView(arcade.View):
 
         #Add healthbar
         for i in range(0, 101, 50):
-            self.health = arcade.Sprite("CodeLockPrison/768px-Eo_circle_red_blank.svg.png", scale=0.04)
-            self.health.center_x = self.health.width
-            self.health.center_y = SCREEN_HEIGHT/2 + i
+            self.health = arcade.Sprite("CodeLockPrison/heart (single).png", scale=0.5)
+            self.health.center_x = 70
+            self.health.center_y = 140 + i
             
             self.health_list.append(self.health)
 
