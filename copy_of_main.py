@@ -187,7 +187,7 @@ class HackingView1(arcade.View):
         self.output = arcade.Sprite("CodeLockPrison/images__2_-removebg-preview.png", scale=0.5)
         self.output.center_x = SCREEN_WIDTH*0.8
         self.output.center_y = SCREEN_HEIGHT*0.3
-        self.output_list.append(self.round_down)
+        self.output_list.append(self.output)
 
 
     def on_draw(self):
