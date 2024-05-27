@@ -12,6 +12,9 @@ SPRITE_SIZE = 64
 SPRITE_SCALING = 0.5
 
 level = 1
+# newly added
+num_internships = "100"
+# newly added
 
 #Prison guards
 class EnemySprite(arcade.Sprite):
@@ -66,10 +69,8 @@ class MyGameView(arcade.View):
     def __init__(self):
         super().__init__()
 
-        # self.background = None
         arcade.set_background_color(arcade.color.BLACK)
         self.button = None
-        # self.button_list = None
 
 
     def setup(self):
@@ -96,6 +97,39 @@ class MyGameView(arcade.View):
             view.setup()
             self.window.show_view(view)
 
+# newly added
+class GameOver(arcade.View):
+    def __init__(self):
+        super().__init__()
+
+        arcade.set_background_color(arcade.color.BLACK)
+        self.button = None
+        self.button_list = None
+
+    def setup(self):
+        self.button_list = arcade.SpriteList()
+        self.button = arcade.Sprite("CodeLockPrison/play-button-neww.png")
+        self.button.center_x = SCREEN_WIDTH / 2
+        self.button.center_y = SCREEN_HEIGHT / 2
+        self.button_list.append(self.button)
+
+    def on_draw(self):
+        self.clear()
+
+        arcade.draw_text("Game Over", SCREEN_WIDTH / 2, SCREEN_HEIGHT*0.9, arcade.color.WHITE, font_size=50, anchor_x="center")
+
+        self.button_list.draw()
+
+    def on_mouse_press(self, x, y, button, key_modifiers):
+        buttons = arcade.get_sprites_at_point((x, y), self.button_list)
+        if len(buttons) > 0:
+            global num_internships
+            num_internships = "100"
+            view = LevelOneView()
+            view.setup()
+            self.window.show_view(view)
+# newly added
+
 class LevelOneView(arcade.View):
     def __init__(self):
         super().__init__()
@@ -104,9 +138,21 @@ class LevelOneView(arcade.View):
 
         self.guard = None
         self.guard_list = None
+        # newly added
+        self.internships = None
+        self.internships_list = None
+        # newly added
 
     def setup(self):
         self.background = arcade.load_texture("CodeLockPrison\level 1 (bare).jpg")
+
+        # newly added
+        self.internships_list = arcade.SpriteList()
+        self.internships = arcade.Sprite("CodeLockPrison/internship.png", scale=0.05)
+        self.internships.center_x = SCREEN_WIDTH * 0.95
+        self.internships.center_y = SCREEN_HEIGHT * 0.9
+        self.internships_list.append(self.internships)
+        # newly added
         
         self.computer_list = arcade.SpriteList()
         self.computer = arcade.Sprite("CodeLockPrison\IMG_3729.PNG", scale=1)
@@ -125,8 +171,22 @@ class LevelOneView(arcade.View):
         arcade.draw_lrwh_rectangle_textured(0, 0,
                                     SCREEN_WIDTH, SCREEN_HEIGHT,
                                     self.background)
+        # newly added
+        # drawing internship count + icon
+        self.internships_list.draw()
+        arcade.draw_text(num_internships, self.internships.center_x * 0.98, self.internships.center_y * 0.99,
+                         arcade.color.BLACK, font_size=15)
+        # newly added
+
         self.computer_list.draw()
         self.guard_list.draw()
+
+        # newly added
+        if int(num_internships) <= 0:
+            view = GameOver()
+            view.setup()
+            self.window.show_view(view)
+        # newly added
 
     def on_mouse_press(self, x, y, button, key_modifiers):
         combat = arcade.get_sprites_at_point((x,y), self.guard_list)
@@ -156,6 +216,11 @@ class HackingView1(arcade.View):
         self.menu = None
         self.menu_list = None
 
+        # newly added
+        self.internships = None
+        self.internships_list = None
+        # newly added
+
         self.user_input = None
         self.User_input_list = None
 
@@ -174,6 +239,14 @@ class HackingView1(arcade.View):
         self.menu.center_x = 100
         self.menu.center_y = 50
         self.menu_list.append(self.menu)
+
+        # newly added
+        self.internships_list = arcade.SpriteList()
+        self.internships = arcade.Sprite("CodeLockPrison/internship.png", scale=0.05)
+        self.internships.center_x = SCREEN_WIDTH*0.95
+        self.internships.center_y = SCREEN_HEIGHT*0.9
+        self.internships_list.append(self.internships)
+        # newly added
 
         self.user_input_list = arcade.SpriteList()
         self.user_input = arcade.Sprite("CodeLockPrison\images__2_-removebg-preview.png", scale=0.5)
@@ -197,6 +270,13 @@ class HackingView1(arcade.View):
                          SCREEN_WIDTH*0.1, SCREEN_HEIGHT*0.85, arcade.color.BLACK, font_size=15, multiline=True, width=SCREEN_WIDTH*0.75)
 
         self.menu_list.draw()
+
+        # newly added
+        # drawing internship count + icon
+        self.internships_list.draw()
+        arcade.draw_text(num_internships, self.internships.center_x*0.98, self.internships.center_y*0.99, arcade.color.BLACK, font_size=15)
+        # newly added
+
         self.user_input_list.draw()
         self.sqrt_list.draw()
     
@@ -472,16 +552,29 @@ class CombatView(arcade.View):
         self.player_list.draw()
         self.health_list.draw()
 
+        # newly added
+        # if user loses combat game
         if len(self.health_list) <= 0:
-            # self.play_mode = 1
+            # lose 50 internships
+            global num_internships
+            num_internships = str(int(num_internships)-50)
+
+            # change view to game over screen
             view = CombatGameOver()
             view.setup()
             self.window.show_view(view)
+
+        # if user wins combat game
         elif self.bullet_num > 25:
+            # gain 100 internships
+            num_internships = str(int(num_internships) + 100)
+
+            # change view to win screen
             view = CombatWinView()
             view.setup()
             self.window.show_view(view)
- 
+
+        # newly added
     
 
     def on_update(self, delta_time):
