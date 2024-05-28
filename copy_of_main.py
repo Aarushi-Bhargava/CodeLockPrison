@@ -154,6 +154,9 @@ class HackingView1(arcade.View):
         self.round_down = None
         self.round_down_list = None
 
+        self.submit_button = None
+        self.submit_button_list = None
+
         self.answers = []
 
     def setup(self):
@@ -189,6 +192,12 @@ class HackingView1(arcade.View):
         self.output.center_y = SCREEN_HEIGHT*0.3
         self.output_list.append(self.output)
 
+        self.submit_list = arcade.SpriteList()
+        self.submit = arcade.Sprite("CodeLockPrison/submit.PNG", scale=0.05)
+        self.submit.center_x = SCREEN_WIDTH*0.70
+        self.submit.center_y = SCREEN_HEIGHT*0.65
+        self.submit_list.append(self.submit)
+
 
     def on_draw(self):
         self.clear()
@@ -202,7 +211,14 @@ class HackingView1(arcade.View):
         self.user_input_list.draw()
         self.sqrt_list.draw()
         self.round_down.draw()
-        self.output.draw()
+        self.output_list.draw()
+        self.submit_list.draw()
+
+        
+        # if self.answers[0] != "0":
+        #     arcade.draw_text("Incorrect", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, arcade.color.WHITE, font_size=50, anchor_x="center")
+        # else:
+        #     arcade.draw_text("Correct", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, arcade.color.WHITE, font_size=50, anchor_x="center")
     
     def on_mouse_press(self, x, y, button, key_modifiers):
         buttons = arcade.get_sprites_at_point((x,y), self.menu_list)
@@ -227,7 +243,18 @@ class HackingView1(arcade.View):
         if len(output_option) > 0:
             self.answers.append("3")
 
-        
+        submit_option = arcade.get_sprites_at_point((x,y), self.submit_list)
+        if len(submit_option) > 0:
+            if self.answers[0] != "0":
+                view = CombatGameOver()
+                view.setup()
+                self.window.show_view(view)            
+            else:
+                view = CombatWinView()
+                view.setup()
+                self.window.show_view(view)
+                arcade.draw_text("Correct", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, arcade.color.BLACK, font_size=50, anchor_x="center")
+    
 
 class CombatGameOver(arcade.View):
     def __init__(self):
