@@ -138,6 +138,67 @@ class LevelOneView(arcade.View):
             view.setup()
             self.window.show_view(view)
 
+class HackWinView(arcade.View):
+    def __init__(self):
+        super().__init__()
+        self.menu = None
+        self.menu_list = None
+
+    def setup(self):
+        self.background = arcade.load_texture("CodeLockPrison/!!.png")
+        
+        self.menu_list = arcade.SpriteList()
+        self.menu = arcade.Sprite("CodeLockPrison/menu icon.png", scale=0.5)
+        self.menu.center_x = SCREEN_WIDTH / 2
+        self.menu.center_y = SCREEN_HEIGHT / 2 + 100
+        self.menu_list.append(self.menu)
+
+
+    def on_draw(self):
+        self.clear()
+        arcade.draw_lrwh_rectangle_textured(0, 0,
+                                    SCREEN_WIDTH, SCREEN_HEIGHT,
+                                    self.background)
+        arcade.draw_text("Successful Hacking!", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 +150, arcade.color.WHITE, font_size=50, anchor_x="center")
+        self.menu_list.draw()
+    
+    def on_mouse_press(self, x, y, button, key_modifiers):
+        buttons = arcade.get_sprites_at_point((x,y), self.menu_list)
+        if len(buttons) > 0:
+            view = LevelOneView()
+            view.setup()
+            self.window.show_view(view)
+
+class HackLoseView(arcade.View):
+    def __init__(self):
+        super().__init__()
+        self.menu = None
+        self.menu_list = None
+
+    def setup(self):
+        self.background = arcade.load_texture("CodeLockPrison/!!.png")
+        
+        self.menu_list = arcade.SpriteList()
+        self.menu = arcade.Sprite("CodeLockPrison/menu icon.png", scale=0.5)
+        self.menu.center_x = SCREEN_WIDTH / 2
+        self.menu.center_y = SCREEN_HEIGHT / 2 + 100
+        self.menu_list.append(self.menu)
+
+
+    def on_draw(self):
+        self.clear()
+        arcade.draw_lrwh_rectangle_textured(0, 0,
+                                    SCREEN_WIDTH, SCREEN_HEIGHT,
+                                    self.background)
+        arcade.draw_text("Unsuccessful Hacking :/ ", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 +150, arcade.color.WHITE, font_size=50, anchor_x="center")
+        self.menu_list.draw()
+    
+    def on_mouse_press(self, x, y, button, key_modifiers):
+        buttons = arcade.get_sprites_at_point((x,y), self.menu_list)
+        if len(buttons) > 0:
+            view = LevelOneView()
+            view.setup()
+            self.window.show_view(view)
 
 class HackingView1(arcade.View):
     def __init__(self):
@@ -246,11 +307,11 @@ class HackingView1(arcade.View):
         submit_option = arcade.get_sprites_at_point((x,y), self.submit_list)
         if len(submit_option) > 0:
             if self.answers[0] != "0":
-                view = CombatGameOver()
+                view = HackLoseView()
                 view.setup()
                 self.window.show_view(view)            
             else:
-                view = CombatWinView()
+                view = HackWinView()
                 view.setup()
                 self.window.show_view(view)
                 arcade.draw_text("Correct", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, arcade.color.BLACK, font_size=50, anchor_x="center")
@@ -266,7 +327,7 @@ class CombatGameOver(arcade.View):
         self.background = arcade.load_texture("CodeLockPrison/combat screen (background).jpg")
         
         self.menu_list = arcade.SpriteList()
-        self.menu = arcade.Sprite("CodeLockPrison/menu icon.png", scale=1)
+        self.menu = arcade.Sprite("CodeLockPrison/menu icon.png", scale=0.5)
         self.menu.center_x = SCREEN_WIDTH / 2
         self.menu.center_y = SCREEN_HEIGHT / 2 + 100
         self.menu_list.append(self.menu)
@@ -297,7 +358,7 @@ class CombatWinView(arcade.View):
         self.background = arcade.load_texture("CodeLockPrison/combat screen (background).jpg")
         
         self.menu_list = arcade.SpriteList()
-        self.menu = arcade.Sprite("CodeLockPrison/menu icon.png", scale=1)
+        self.menu = arcade.Sprite("CodeLockPrison/menu icon.png", scale=0.5)
         self.menu.center_x = SCREEN_WIDTH / 2
         self.menu.center_y = SCREEN_HEIGHT / 2 + 100
         self.menu_list.append(self.menu)
