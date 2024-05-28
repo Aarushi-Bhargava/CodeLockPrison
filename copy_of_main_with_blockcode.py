@@ -166,9 +166,11 @@ class HackingView1(arcade.View):
 
         self.blocks = arcade.SpriteList()
         for i, text in enumerate(self.block_texts):
-            block = arcade.Sprite("CodeLockPrison/blue_block.png", scale=0.5)
-            block.center_x = SCREEN_WIDTH * 0.2 + (i % 2) * 200
-            block.center_y = SCREEN_HEIGHT * 0.5 - (i // 2) * 100
+            block = arcade.Sprite("CodeLockPrison/images__2_-removebg-preview.png", scale=0.5)
+            block.width = 300  # Set your desired width
+            block.height = 100  # Set your desired height
+            block.center_x = SCREEN_WIDTH * 0.3 + (i % 2) * 350
+            block.center_y = SCREEN_HEIGHT * 0.6 - (i // 2) * 150
             block.index = i
             block.text = text
             self.blocks.append(block)
@@ -241,9 +243,11 @@ class HackingView2(arcade.View):
 
         self.blocks = arcade.SpriteList()
         for i, text in enumerate(self.block_texts):
-            block = arcade.Sprite("CodeLockPrison/blue_block.png", scale=0.5)
-            block.center_x = SCREEN_WIDTH * 0.2 + (i % 2) * 200
-            block.center_y = SCREEN_HEIGHT * 0.5 - (i // 2) * 100
+            block = arcade.Sprite("CodeLockPrison/images__2_-removebg-preview.png", scale=0.5)
+            block.width = 300  # Set your desired width
+            block.height = 100  # Set your desired height
+            block.center_x = SCREEN_WIDTH * 0.3 + (i % 2) * 350
+            block.center_y = SCREEN_HEIGHT * 0.6 - (i // 2) * 150
             block.index = i
             block.text = text
             self.blocks.append(block)
@@ -314,9 +318,11 @@ class HackingView3(arcade.View):
 
         self.blocks = arcade.SpriteList()
         for i, text in enumerate(self.block_texts):
-            block = arcade.Sprite("CodeLockPrison/blue_block.png", scale=0.5)
-            block.center_x = SCREEN_WIDTH * 0.2 + (i % 2) * 200
-            block.center_y = SCREEN_HEIGHT * 0.5 - (i // 2) * 100
+            block = arcade.Sprite("CodeLockPrison/images__2_-removebg-preview.png", scale=0.5)
+            block.width = 300  # Set your desired width
+            block.height = 100  # Set your desired height
+            block.center_x = SCREEN_WIDTH * 0.3 + (i % 2) * 350
+            block.center_y = SCREEN_HEIGHT * 0.6 - (i // 2) * 150
             block.index = i
             block.text = text
             self.blocks.append(block)
