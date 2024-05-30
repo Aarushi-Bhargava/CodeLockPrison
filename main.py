@@ -306,9 +306,9 @@ class HackingView1(arcade.View):
 
         # button to return to homepage
         self.menu_list = arcade.SpriteList()
-        self.menu = arcade.Sprite("CodeLockPrison/menu icon.png", scale=1)
+        self.menu = arcade.Sprite("CodeLockPrison/menu icon.png", scale=0.4)
         self.menu.center_x = 100
-        self.menu.center_y = 50
+        self.menu.center_y = 550
         self.menu_list.append(self.menu)
 
         # setting up internships count
@@ -328,9 +328,9 @@ class HackingView1(arcade.View):
         # code blocks
         self.blocks = arcade.SpriteList()
         for i, text in enumerate(self.block_texts):
-            block = arcade.Sprite("CodeLockPrison/images__2_-removebg-preview.png", scale=0.5)
-            block.width = 300  # Set your desired width
-            block.height = 100  # Set your desired height
+            block = arcade.Sprite("CodeLockPrison/pixelated button bg.png", scale=1)
+            block.width = 400  # Set your desired width
+            block.height = 200  # Set your desired height
             block.center_x = SCREEN_WIDTH * 0.3 + (i % 2) * 350
             block.center_y = SCREEN_HEIGHT * 0.6 - (i // 2) * 150
             block.index = i
@@ -658,7 +658,7 @@ class CombatView(arcade.View):
             self.health_list.append(self.health)
 
         # Add player ship
-        self.player = arcade.Sprite("CodeLockPrison/girl sliding.gif", scale=0.3)
+        self.player = arcade.Sprite("CodeLockPrison/girl walking2.png", scale=0.3)
         self.player.center_x = SCREEN_WIDTH / 2
         self.player.center_y = 50
         self.player_list.append(self.player)
