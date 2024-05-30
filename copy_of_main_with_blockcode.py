@@ -143,27 +143,37 @@ class LevelOneView(arcade.View):
 class HackingView1(arcade.View):
     def __init__(self):
         super().__init__()
+
+        # button to return to homepage
         self.menu_list = None
+
+        # code blocks
         self.blocks = []
-        self.code_display = ""
         self.block_texts = [
             "num_tiles = int(input())",  # User Input
             "max_side_length = math.sqrt(num_tiles)",  # Square Root Function
             "max_side_length = math.floor(max_side_length)",  # Round Down Function
             "print(max_side_length)"  # Output
         ]
+
+        # checking order of code blocks
         self.correct_order = [0, 1, 2, 3]
         self.current_order = []
+
+        # displaying the written code
+        self.code_display = ""
 
     def setup(self):
         self.background = arcade.load_texture("CodeLockPrison/IMG_3707.PNG")
 
+        # button to return to homepage
         self.menu_list = arcade.SpriteList()
         self.menu = arcade.Sprite("CodeLockPrison/menu icon.png", scale=1)
         self.menu.center_x = 100
         self.menu.center_y = 50
         self.menu_list.append(self.menu)
 
+        # code blocks
         self.blocks = arcade.SpriteList()
         for i, text in enumerate(self.block_texts):
             block = arcade.Sprite("CodeLockPrison/images__2_-removebg-preview.png", scale=0.5)
@@ -178,34 +188,48 @@ class HackingView1(arcade.View):
     def on_draw(self):
         self.clear()
         arcade.draw_lrwh_rectangle_textured(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, self.background)
+
+        # drawing programming question
         question_text = "Write a program that asks the user for the number of tiles and then prints out the maximum side length. You may assume that the user will only type integers that are less than ten thousand. Once your program has read the user’s input and printed the largest square, your program stops executing."
         arcade.draw_text(question_text, SCREEN_WIDTH * 0.1, SCREEN_HEIGHT * 0.85, arcade.color.BLACK, font_size=15,
                          multiline=True, width=SCREEN_WIDTH * 0.75)
 
+        # drawing home button
         self.menu_list.draw()
+
+        # drawing code blocks
         self.blocks.draw()
 
+        # drawing text onto code blocks
         for block in self.blocks:
             arcade.draw_text(block.text, block.center_x, block.center_y, arcade.color.WHITE, font_size=10,
                              anchor_x="center", anchor_y="center")
 
+        # drawing actual code
         arcade.draw_text(self.code_display, SCREEN_WIDTH * 0.1, SCREEN_HEIGHT * 0.4, arcade.color.BLACK, font_size=15,
                          multiline=True, width=SCREEN_WIDTH * 0.75)
 
     def on_mouse_press(self, x, y, button, key_modifiers):
+
+        # if user clicks on menu button
         menu_buttons = arcade.get_sprites_at_point((x, y), self.menu_list)
         if len(menu_buttons) > 0:
             view = LevelOneView()
             view.setup()
             self.window.show_view(view)
 
+        # if user clicks on code blocks
         clicked_blocks = arcade.get_sprites_at_point((x, y), self.blocks)
         if clicked_blocks:
             clicked_block = clicked_blocks[0]
             if clicked_block.index not in self.current_order:
+                # appending clicked code block to user's order
                 self.current_order.append(clicked_block.index)
+
+                # displaying the code of the clock clicked
                 self.code_display += clicked_block.text + "\n"
 
+                # checking answers
                 if self.current_order == self.correct_order:
                     self.code_display += "\nCorrect! You have solved the problem."
 
