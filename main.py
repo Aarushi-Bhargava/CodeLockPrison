@@ -699,19 +699,10 @@ class CombatView(arcade.View):
         self.player_list.draw()
         self.health_list.draw()
 
-        if len(self.health_list) <= 0:
-            view = CombatGameOver()
-            view.setup()
-            self.window.show_view(view)
-        elif self.bullet_num > 25:
-            view = CombatWinView()
-            view.setup()
-            self.window.show_view(view)
-
+        global num_internships
         # if user loses combat game
         if len(self.health_list) <= 0:
             # lose 50 internships
-            global num_internships
             num_internships = str(int(num_internships) - (level*50))
 
             # change view to game over screen
@@ -721,8 +712,8 @@ class CombatView(arcade.View):
 
         # if user wins combat game
         elif self.bullet_num > level*15:
-            # gain 100 internships
-            num_internships = str(int(num_internships) + (level*50))
+            # gain internships
+            num_internships = str(int(num_internships) + 100)
 
             # change view to win screen
             view = CombatWinView()
