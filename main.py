@@ -62,6 +62,7 @@ class EnemySprite(arcade.Sprite):
         bullet.change_y = -2
         self.bullet_list.append(bullet)
 
+
 # Setting up the arcade window where video game is displayed
 
 class MyGameView(arcade.View):
@@ -402,11 +403,11 @@ class HackingView1(arcade.View):
                 arcade.draw_text("Correct", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, arcade.color.BLACK, font_size=50,
                                  anchor_x="center")
                 global level
-                num_internships = str(int(num_internships) * level * 10)
-                level = 2
-
                 # gain internships for beating level
-                # global num_internships
+                num_internships = str(int(num_internships) + (level * 100))
+
+                #switching levels
+                level = 2
 
             else:
                 view = HackLoseView()
@@ -421,19 +422,25 @@ class HackingView2(arcade.View):
         # button to return to homepage
         self.menu_list = None
 
+        # internships tracker
+        self.internships_list = None
+
+        # submitting code button
+        self.submit_button_list = None
+
         # code blocks
         self.blocks = []
         self.block_texts = [
             "secret_code = input()",  # User input
-            "direction_sum = int(secret_code[0]) + int(secret_code[1])",  # Variable block
             "secret_code[0]",  # Slice array function
             "secret_code[1]",  # Slice array function
+            "direction_sum = int(secret_code[0]) + int(secret_code[1])",  # Variable block
             "if direction_sum % 2 == 1:",  # If statement
             "direction = 'left'",  # Variable block (direction)
             "else:",  # Else statement
             "direction = 'right'",  # Variable block (direction)
-            "num_steps = secret_code[2:]",  # Variable block (num_steps)
             "secret_code[2:]",  # Slice array function (3rd to 5th digit)
+            "num_steps = secret_code[2:]",  # Variable block (num_steps)
             "print(direction + num_steps)"  # Output
         ]
 
@@ -454,6 +461,20 @@ class HackingView2(arcade.View):
         self.menu.center_y = 50
         self.menu_list.append(self.menu)
 
+        # setting up internships count
+        self.internships_list = arcade.SpriteList()
+        self.internships = arcade.Sprite("CodeLockPrison/internship.png", scale=0.05)
+        self.internships.center_x = SCREEN_WIDTH * 0.95
+        self.internships.center_y = SCREEN_HEIGHT * 0.9
+        self.internships_list.append(self.internships)
+
+        # submit code button
+        self.submit_list = arcade.SpriteList()
+        self.submit = arcade.Sprite("CodeLockPrison/submit.PNG", scale=0.04)
+        self.submit.center_x = SCREEN_WIDTH * 0.48
+        self.submit.center_y = SCREEN_HEIGHT * 0.21
+        self.submit_list.append(self.submit)
+
         # code blocks
         self.blocks = arcade.SpriteList()
         for i, text in enumerate(self.block_texts):
@@ -469,6 +490,11 @@ class HackingView2(arcade.View):
     def on_draw(self):
         self.clear()
         arcade.draw_lrwh_rectangle_textured(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, self.background)
+
+        # drawing internship count + icon
+        self.internships_list.draw()
+        arcade.draw_text(num_internships, self.internships.center_x * 0.98, self.internships.center_y * 0.99,
+                         arcade.color.BLACK, font_size=15)
 
         # drawing hacking question
         question_text = "Each instruction is a sequence of five digits which represents a direction to turn and the number of steps to take to reach the top-secret safe."
@@ -505,6 +531,10 @@ class HackingView2(arcade.View):
         if clicked_blocks:
             clicked_block = clicked_blocks[0]
             if clicked_block.index not in self.current_order:
+                # each block costs 20 internships
+                global num_internships
+                num_internships = str(int(num_internships) - 20)
+
                 # appending clicked code block to user's order
                 self.current_order.append(clicked_block.index)
 
