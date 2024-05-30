@@ -59,7 +59,7 @@ class EnemySprite(arcade.Sprite):
         bullet.center_x = self.center_x
         bullet.angle = -90
         bullet.top = self.bottom
-        bullet.change_y = -2
+        bullet.change_y = -5
         self.bullet_list.append(bullet)
 
 
@@ -667,9 +667,9 @@ class CombatView(arcade.View):
         enemy = EnemySprite("CodeLockPrison/robot shooting.PNG",
                             scale=0.1,
                             bullet_list=self.bullet_list,
-                            min_time_between_firing=0.5,  # Minimum time between shots
-                            max_time_between_firing=2.0,  # Maximum time between shots
-                            movement_speed=2,
+                            min_time_between_firing=0.2,  # Minimum time between shots
+                            max_time_between_firing=1,  # Maximum time between shots
+                            movement_speed=4,
                             boundary_left=0,
                             boundary_right=SCREEN_WIDTH)
         enemy.center_x = SCREEN_WIDTH / 2
@@ -711,7 +711,7 @@ class CombatView(arcade.View):
         if len(self.health_list) <= 0:
             # lose 50 internships
             global num_internships
-            num_internships = str(int(num_internships) - 50)
+            num_internships = str(int(num_internships) - (level*50))
 
             # change view to game over screen
             view = CombatGameOver()
@@ -719,9 +719,9 @@ class CombatView(arcade.View):
             self.window.show_view(view)
 
         # if user wins combat game
-        elif self.bullet_num > 25:
+        elif self.bullet_num > level*15:
             # gain 100 internships
-            num_internships = str(int(num_internships) + 100)
+            num_internships = str(int(num_internships) + (level*50))
 
             # change view to win screen
             view = CombatWinView()
