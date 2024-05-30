@@ -62,7 +62,6 @@ class EnemySprite(arcade.Sprite):
         bullet.change_y = -2
         self.bullet_list.append(bullet)
 
-
 # Setting up the arcade window where video game is displayed
 
 class MyGameView(arcade.View):
@@ -310,9 +309,9 @@ class HackingView1(arcade.View):
 
         # submit code button
         self.submit_list = arcade.SpriteList()
-        self.submit = arcade.Sprite("CodeLockPrison/submit.PNG", scale=0.05)
-        self.submit.center_x = SCREEN_WIDTH * 0.72
-        self.submit.center_y = SCREEN_HEIGHT * 0.65
+        self.submit = arcade.Sprite("CodeLockPrison/submit.PNG", scale=0.04)
+        self.submit.center_x = SCREEN_WIDTH * 0.48
+        self.submit.center_y = SCREEN_HEIGHT * 0.21
         self.submit_list.append(self.submit)
 
         # code blocks
