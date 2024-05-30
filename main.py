@@ -59,7 +59,8 @@ class EnemySprite(arcade.Sprite):
         bullet.center_x = self.center_x
         bullet.angle = -90
         bullet.top = self.bottom
-        bullet.change_y = -5
+        global level
+        bullet.change_y = -(level*5)
         self.bullet_list.append(bullet)
 
 
