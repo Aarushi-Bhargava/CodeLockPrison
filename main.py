@@ -279,6 +279,9 @@ class HackingView1(arcade.View):
         # button to return to homepage
         self.menu_list = None
 
+        # internships tracker
+        self.internships_list = None
+
         # submitting code button
         self.submit_button_list = None
 
@@ -308,6 +311,13 @@ class HackingView1(arcade.View):
         self.menu.center_y = 50
         self.menu_list.append(self.menu)
 
+        # setting up internships count
+        self.internships_list = arcade.SpriteList()
+        self.internships = arcade.Sprite("CodeLockPrison/internship.png", scale=0.05)
+        self.internships.center_x = SCREEN_WIDTH * 0.95
+        self.internships.center_y = SCREEN_HEIGHT * 0.9
+        self.internships_list.append(self.internships)
+
         # submit code button
         self.submit_list = arcade.SpriteList()
         self.submit = arcade.Sprite("CodeLockPrison/submit.PNG", scale=0.05)
@@ -330,6 +340,11 @@ class HackingView1(arcade.View):
     def on_draw(self):
         self.clear()
         arcade.draw_lrwh_rectangle_textured(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, self.background)
+
+        # drawing internship count + icon
+        self.internships_list.draw()
+        arcade.draw_text(num_internships, self.internships.center_x * 0.98, self.internships.center_y * 0.99,
+                         arcade.color.BLACK, font_size=15)
 
         # drawing programming question
         question_text = "Write a program that asks the user for the number of tiles and then prints out the maximum side length. You may assume that the user will only type integers that are less than ten thousand. Once your program has read the user’s input and printed the largest square, your program stops executing."
@@ -368,6 +383,10 @@ class HackingView1(arcade.View):
         if clicked_blocks:
             clicked_block = clicked_blocks[0]
             if clicked_block.index not in self.current_order:
+                # each block costs 20 internships
+                global num_internships
+                num_internships = str(int(num_internships) - 20)
+
                 # appending clicked code block to user's order
                 self.current_order.append(clicked_block.index)
 
@@ -384,7 +403,12 @@ class HackingView1(arcade.View):
                 arcade.draw_text("Correct", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, arcade.color.BLACK, font_size=50,
                                  anchor_x="center")
                 global level
+                num_internships = str(int(num_internships) * level * 10)
                 level = 2
+
+                # gain internships for beating level
+                # global num_internships
+
             else:
                 view = HackLoseView()
                 view.setup()
@@ -454,6 +478,9 @@ class HackingView2(arcade.View):
 
         # drawing menu button
         self.menu_list.draw()
+
+        # drawing submit button
+        self.submit_list.draw()
 
         # drawing code blocks
         self.blocks.draw()
