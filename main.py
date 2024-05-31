@@ -457,9 +457,9 @@ class HackingView2(arcade.View):
 
         # menu button
         self.menu_list = arcade.SpriteList()
-        self.menu = arcade.Sprite("CodeLockPrison/menu icon.png", scale=1)
+        self.menu = arcade.Sprite("CodeLockPrison/menu icon.png", scale=0.4)
         self.menu.center_x = 100
-        self.menu.center_y = 50
+        self.menu.center_y = 550
         self.menu_list.append(self.menu)
 
         # setting up internships count
@@ -479,11 +479,13 @@ class HackingView2(arcade.View):
         # code blocks
         self.blocks = arcade.SpriteList()
         for i, text in enumerate(self.block_texts):
-            block = arcade.Sprite("CodeLockPrison/images__2_-removebg-preview.png", scale=0.5)
-            block.width = 300  # Set your desired width
-            block.height = 100  # Set your desired height
+            block = arcade.Sprite("CodeLockPrison/pixelated button bg.png", scale=1)
+            block.width = 450  # Set your desired width
+            block.height = 200  # Set your desired height
             block.center_x = SCREEN_WIDTH * 0.3 + (i % 2) * 350
-            block.center_y = SCREEN_HEIGHT * 0.6 - (i // 2) * 150
+            block.center_y = SCREEN_HEIGHT * 0.9 - (i // 2) * 150
+            # block.center_x = SCREEN_WIDTH * 0.3 + (i % 2) * 350
+            # block.center_y = SCREEN_HEIGHT * 0.9 - (i // 2) * 150
             block.index = i
             block.text = text
             self.blocks.append(block)
