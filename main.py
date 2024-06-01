@@ -98,6 +98,66 @@ class MyGameView(arcade.View):
             view.setup()
             self.window.show_view(view)
 
+class MenuView(arcade.View):
+    def __init__(self):
+        super().__init__()
+
+        arcade.set_background_color(arcade.color.BLACK)
+
+        self.back_list = None
+
+        self.story_list = None
+
+        self.view_mode = 0
+
+    def setup(self):
+        self.background = arcade.load_texture("CodeLockPrison/menu_background.PNG")
+
+        self.story_list = arcade.SpriteList()
+        self.story = arcade.Sprite("CodeLockPrison/pixelated button bg.png")
+        self.story.center_x = SCREEN_WIDTH / 2
+        self.story.center_y = SCREEN_HEIGHT / 2
+        self.story_list.append(self.story)
+
+        # button to return to homepage
+        self.back_list = arcade.SpriteList()
+        self.back = arcade.Sprite("CodeLockPrison/back button.png", scale=0.2)
+        self.back.center_x = 100
+        self.back.center_y = 550
+        self.back_list.append(self.back)
+
+    def on_draw(self):
+        self.clear()
+
+        arcade.draw_lrwh_rectangle_textured(0, 0,
+                                            SCREEN_WIDTH, SCREEN_HEIGHT,
+                                            self.background)
+
+        if self.view_mode == 0:
+            self.story_list.draw()
+            arcade.draw_text("Game Story", self.story.center_x, self.story.center_y, arcade.color.BLACK, font_size=40, anchor_y="center",
+                             anchor_x="center")
+        elif self.view_mode == 1:
+            arcade.draw_text("You are a prisoner with exceptional coding skills, and your goal is to escape from jail. To succeed, you'll need to hack into systems and outsmart prison guards. Each hacking problem you solve brings you closer to freedom. Are you ready to embark on this epic escape?",
+                             SCREEN_WIDTH*0.2, SCREEN_HEIGHT/2, arcade.color.WHITE, font_size=20, anchor_y="center",
+                             multiline=True, width=SCREEN_WIDTH * 0.75)
+
+        self.back_list.draw()
+
+    def on_mouse_press(self, x, y, button, key_modifiers):
+        story = arcade.get_sprites_at_point((x, y), self.story_list)
+        if story:
+            self.view_mode = 1
+
+        back = arcade.get_sprites_at_point((x, y), self.back_list)
+        if back:
+            if self.view_mode == 0:
+                view = LevelView()
+                view.setup()
+                self.window.show_view(view)
+            else:
+                self.view_mode = 0
+
 
 class GameOver(arcade.View):
     def __init__(self):
@@ -136,6 +196,9 @@ class LevelView(arcade.View):
     def __init__(self):
         super().__init__()
 
+        # menu button
+        self.menu_list = None
+
         # button to go to hacking view
         self.computer_list = None
 
@@ -147,6 +210,13 @@ class LevelView(arcade.View):
 
     def setup(self):
         self.background = arcade.load_texture("CodeLockPrison/level 1 (bare).jpg")
+
+        # menu button
+        self.menu_list = arcade.SpriteList()
+        self.menu = arcade.Sprite("CodeLockPrison/menu icon.png", scale=0.4)
+        self.menu.center_x = 100
+        self.menu.center_y = 550
+        self.menu_list.append(self.menu)
 
         # setting up internships count
         self.internships_list = arcade.SpriteList()
@@ -180,10 +250,11 @@ class LevelView(arcade.View):
         arcade.draw_text(num_internships, self.internships.center_x * 0.98, self.internships.center_y * 0.99,
                          arcade.color.BLACK, font_size=15)
 
-        arcade.draw_text("Level "+str(level), SCREEN_WIDTH*0.05, SCREEN_HEIGHT * 0.9,
+        arcade.draw_text("Level "+str(level), SCREEN_WIDTH*0.9, SCREEN_HEIGHT * 0.04,
                          arcade.color.BLACK, font_size=15)
 
         # drawing other graphics
+        self.menu_list.draw()
         self.computer_list.draw()
         self.guard_list.draw()
 
@@ -194,6 +265,11 @@ class LevelView(arcade.View):
             self.window.show_view(view)
 
     def on_mouse_press(self, x, y, button, key_modifiers):
+        menus = arcade.get_sprites_at_point((x, y), self.menu_list)
+        if len(menus) > 0:
+            view = MenuView()
+            view.setup()
+            self.window.show_view(view)
         combat = arcade.get_sprites_at_point((x, y), self.guard_list)
         if len(combat) > 0:
             view = CombatView()
@@ -215,16 +291,26 @@ class HackWinView(arcade.View):
     def __init__(self):
         super().__init__()
 
-        # menu button (returns to homepage)
+        # menu button
         self.menu_list = None
+
+        # (returns to homepage)
+        self.back_list = None
 
     def setup(self):
         self.background = arcade.load_texture("CodeLockPrison/!!.png")
 
+        self.back_list = arcade.SpriteList()
+        self.back = arcade.Sprite("CodeLockPrison/back button.png", scale=0.25)
+        self.back.center_x = SCREEN_WIDTH / 2
+        self.back.center_y = SCREEN_HEIGHT / 2 + 100
+        self.back_list.append(self.back)
+
+        # menu button
         self.menu_list = arcade.SpriteList()
-        self.menu = arcade.Sprite("CodeLockPrison/menu icon.png", scale=0.5)
-        self.menu.center_x = SCREEN_WIDTH / 2
-        self.menu.center_y = SCREEN_HEIGHT / 2 + 100
+        self.menu = arcade.Sprite("CodeLockPrison/menu icon.png", scale=0.4)
+        self.menu.center_x = 100
+        self.menu.center_y = 550
         self.menu_list.append(self.menu)
 
     def on_draw(self):
@@ -237,11 +323,17 @@ class HackWinView(arcade.View):
         arcade.draw_text("Level Up!", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 + 150, arcade.color.WHITE,
                          font_size=50, anchor_x="center")
         self.menu_list.draw()
+        self.back_list.draw()
 
     def on_mouse_press(self, x, y, button, key_modifiers):
-        buttons = arcade.get_sprites_at_point((x, y), self.menu_list)
+        buttons = arcade.get_sprites_at_point((x, y), self.back_list)
         if len(buttons) > 0:
             view = LevelView()
+            view.setup()
+            self.window.show_view(view)
+        menu = arcade.get_sprites_at_point((x, y), self.menu_list)
+        if len(menu) > 0:
+            view = MenuView()
             view.setup()
             self.window.show_view(view)
 
@@ -251,14 +343,23 @@ class HackLoseView(arcade.View):
         super().__init__()
         # menu button
         self.menu_list = None
+        self.back_list = None
+
 
     def setup(self):
         self.background = arcade.load_texture("CodeLockPrison/!!.png")
 
+        self.back_list = arcade.SpriteList()
+        self.back = arcade.Sprite("CodeLockPrison/back button.png", scale=0.25)
+        self.back.center_x = SCREEN_WIDTH / 2
+        self.back.center_y = SCREEN_HEIGHT / 2 + 100
+        self.back_list.append(self.back)
+
+        # menu button
         self.menu_list = arcade.SpriteList()
-        self.menu = arcade.Sprite("CodeLockPrison/menu icon.png", scale=0.5)
-        self.menu.center_x = SCREEN_WIDTH / 2
-        self.menu.center_y = SCREEN_HEIGHT / 2 + 100
+        self.menu = arcade.Sprite("CodeLockPrison/menu icon.png", scale=0.4)
+        self.menu.center_x = 100
+        self.menu.center_y = 550
         self.menu_list.append(self.menu)
 
     def on_draw(self):
@@ -269,11 +370,18 @@ class HackLoseView(arcade.View):
         arcade.draw_text("Unsuccessful Hacking :/ ", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 + 150, arcade.color.WHITE,
                          font_size=50, anchor_x="center")
         self.menu_list.draw()
+        self.back_list.draw()
+
 
     def on_mouse_press(self, x, y, button, key_modifiers):
-        buttons = arcade.get_sprites_at_point((x, y), self.menu_list)
+        buttons = arcade.get_sprites_at_point((x, y), self.back_list)
         if len(buttons) > 0:
             view = LevelView()
+            view.setup()
+            self.window.show_view(view)
+        menu = arcade.get_sprites_at_point((x, y), self.menu_list)
+        if len(menu) > 0:
+            view = MenuView()
             view.setup()
             self.window.show_view(view)
 
@@ -284,6 +392,9 @@ class HackingView1(arcade.View):
 
         # button to return to homepage
         self.menu_list = None
+
+        # button to return to homepage
+        self.back_list = None
 
         # internships tracker
         self.internships_list = None
@@ -310,12 +421,19 @@ class HackingView1(arcade.View):
     def setup(self):
         self.background = arcade.load_texture("CodeLockPrison/IMG_3707.PNG")
 
-        # button to return to homepage
+        # menu button
         self.menu_list = arcade.SpriteList()
         self.menu = arcade.Sprite("CodeLockPrison/menu icon.png", scale=0.4)
         self.menu.center_x = 100
         self.menu.center_y = 550
         self.menu_list.append(self.menu)
+
+        # button to return to homepage
+        self.back_list = arcade.SpriteList()
+        self.back = arcade.Sprite("CodeLockPrison/back button.png", scale=0.2)
+        self.back.center_x = 220
+        self.back.center_y = 550
+        self.back_list.append(self.back)
 
         # setting up internships count
         self.internships_list = arcade.SpriteList()
@@ -360,6 +478,9 @@ class HackingView1(arcade.View):
         # drawing home button
         self.menu_list.draw()
 
+        # drawing home button
+        self.back_list.draw()
+
         # drawing submit button
         self.submit_list.draw()
 
@@ -378,9 +499,16 @@ class HackingView1(arcade.View):
     def on_mouse_press(self, x, y, button, key_modifiers):
 
         # if user clicks on menu button
+        back_buttons = arcade.get_sprites_at_point((x, y), self.back_list)
+        if back_buttons:
+            view = LevelView()
+            view.setup()
+            self.window.show_view(view)
+
+        # if user clicks on menu button
         menu_buttons = arcade.get_sprites_at_point((x, y), self.menu_list)
         if menu_buttons:
-            view = LevelView()
+            view = MenuView()
             view.setup()
             self.window.show_view(view)
 
@@ -427,6 +555,8 @@ class HackingView2(arcade.View):
 
         # button to return to homepage
         self.menu_list = None
+        self.back_list = None
+
 
         # internships tracker
         self.internships_list = None
@@ -459,6 +589,13 @@ class HackingView2(arcade.View):
 
     def setup(self):
         self.background = arcade.load_texture("CodeLockPrison/IMG_3707.PNG")
+
+        # button to return to homepage
+        self.back_list = arcade.SpriteList()
+        self.back = arcade.Sprite("CodeLockPrison/back button.png", scale=0.2)
+        self.back.center_x = 220
+        self.back.center_y = 550
+        self.back_list.append(self.back)
 
         # menu button
         self.menu_list = arcade.SpriteList()
@@ -511,6 +648,7 @@ class HackingView2(arcade.View):
 
         # drawing menu button
         self.menu_list.draw()
+        self.back_list.draw()
 
         # drawing submit button
         self.submit_list.draw()
@@ -529,9 +667,15 @@ class HackingView2(arcade.View):
     def on_mouse_press(self, x, y, button, key_modifiers):
 
         # if menu button is clicked
+        back_buttons = arcade.get_sprites_at_point((x, y), self.back_list)
+        if len(back_buttons) > 0:
+            view = LevelView()
+            view.setup()
+            self.window.show_view(view)
+        # if menu button is clicked
         menu_buttons = arcade.get_sprites_at_point((x, y), self.menu_list)
         if len(menu_buttons) > 0:
-            view = LevelView()
+            view = MenuView()
             view.setup()
             self.window.show_view(view)
         # if user clicks on code blocks
@@ -570,14 +714,22 @@ class CombatGameOver(arcade.View):
     def __init__(self):
         super().__init__()
         self.menu_list = None
+        self.back_list = None
 
     def setup(self):
         self.background = arcade.load_texture("CodeLockPrison/combat screen (background).jpg")
 
+        self.back_list = arcade.SpriteList()
+        self.back = arcade.Sprite("CodeLockPrison/back button.png", scale=0.5)
+        self.back.center_x = SCREEN_WIDTH / 2
+        self.back.center_y = SCREEN_HEIGHT / 2 + 100
+        self.back_list.append(self.back)
+
+        # menu button
         self.menu_list = arcade.SpriteList()
-        self.menu = arcade.Sprite("CodeLockPrison/menu icon.png", scale=0.5)
-        self.menu.center_x = SCREEN_WIDTH / 2
-        self.menu.center_y = SCREEN_HEIGHT / 2 + 100
+        self.menu = arcade.Sprite("CodeLockPrison/menu icon.png", scale=0.4)
+        self.menu.center_x = 100
+        self.menu.center_y = 550
         self.menu_list.append(self.menu)
 
     def on_draw(self):
@@ -588,11 +740,17 @@ class CombatGameOver(arcade.View):
         arcade.draw_text("Game Over", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, arcade.color.WHITE, font_size=50,
                          anchor_x="center")
         self.menu_list.draw()
+        self.back_list.draw()
 
     def on_mouse_press(self, x, y, button, key_modifiers):
-        buttons = arcade.get_sprites_at_point((x, y), self.menu_list)
-        if len(buttons) > 0:
+        back = arcade.get_sprites_at_point((x, y), self.back_list)
+        if back:
             view = LevelView()
+            view.setup()
+            self.window.show_view(view)
+        menu = arcade.get_sprites_at_point((x, y), self.menu_list)
+        if menu:
+            view = MenuView()
             view.setup()
             self.window.show_view(view)
 
@@ -601,14 +759,22 @@ class CombatWinView(arcade.View):
     def __init__(self):
         super().__init__()
         self.menu_list = None
+        self.back_list = None
 
     def setup(self):
         self.background = arcade.load_texture("CodeLockPrison/combat screen (background).jpg")
 
+        self.back_list = arcade.SpriteList()
+        self.back = arcade.Sprite("CodeLockPrison/back button.png", scale=0.25)
+        self.back.center_x = SCREEN_WIDTH / 2
+        self.back.center_y = SCREEN_HEIGHT / 2 + 100
+        self.back_list.append(self.back)
+
+        # menu button
         self.menu_list = arcade.SpriteList()
-        self.menu = arcade.Sprite("CodeLockPrison/menu icon.png", scale=0.5)
-        self.menu.center_x = SCREEN_WIDTH / 2
-        self.menu.center_y = SCREEN_HEIGHT / 2 + 100
+        self.menu = arcade.Sprite("CodeLockPrison/menu icon.png", scale=0.4)
+        self.menu.center_x = 100
+        self.menu.center_y = 550
         self.menu_list.append(self.menu)
 
     def on_draw(self):
@@ -619,11 +785,17 @@ class CombatWinView(arcade.View):
         arcade.draw_text("You Win!", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, arcade.color.WHITE, font_size=50,
                          anchor_x="center")
         self.menu_list.draw()
+        self.back_list.draw()
 
     def on_mouse_press(self, x, y, button, key_modifiers):
-        buttons = arcade.get_sprites_at_point((x, y), self.menu_list)
+        buttons = arcade.get_sprites_at_point((x, y), self.back_list)
         if len(buttons) > 0:
             view = LevelView()
+            view.setup()
+            self.window.show_view(view)
+        menu = arcade.get_sprites_at_point((x, y), self.menu_list)
+        if menu:
+            view = MenuView()
             view.setup()
             self.window.show_view(view)
 
@@ -635,6 +807,8 @@ class CombatView(arcade.View):
         super().__init__()
 
         arcade.set_background_color(arcade.color.BLACK)
+
+        self.menu_list = None
 
         self.player = None
         self.player_list = None
@@ -650,6 +824,13 @@ class CombatView(arcade.View):
         """ Setup the variables for the game. """
 
         self.background = arcade.load_texture("CodeLockPrison/combat screen (background).jpg")
+
+        # menu button
+        self.menu_list = arcade.SpriteList()
+        self.menu = arcade.Sprite("CodeLockPrison/menu icon.png", scale=0.4)
+        self.menu.center_x = 100
+        self.menu.center_y = 550
+        self.menu_list.append(self.menu)
 
         self.player_list = arcade.SpriteList()
         self.enemy_list = arcade.SpriteList()
@@ -700,6 +881,8 @@ class CombatView(arcade.View):
         arcade.draw_lrwh_rectangle_textured(0, 0,
                                             SCREEN_WIDTH, SCREEN_HEIGHT,
                                             self.background)
+
+        self.menu_list.draw()
 
         self.enemy_list.draw()
         self.bullet_list.draw()
@@ -771,6 +954,13 @@ class CombatView(arcade.View):
         if self.play_mode == 0:
             if key == arcade.key.LEFT or key == arcade.key.RIGHT:
                 self.player.change_x = 0
+
+    def on_mouse_press(self, x, y, button, key_modifiers):
+        buttons = arcade.get_sprites_at_point((x, y), self.menu_list)
+        if len(buttons) > 0:
+            view = MenuView()
+            view.setup()
+            self.window.show_view(view)
 
 
 def main():
