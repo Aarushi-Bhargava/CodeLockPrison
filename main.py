@@ -94,7 +94,7 @@ class MyGameView(arcade.View):
     def on_mouse_press(self, x, y, button, key_modifiers):
         buttons = arcade.get_sprites_at_point((x, y), self.button_list)
         if len(buttons) > 0:
-            view = LevelOneView()
+            view = LevelView()
             view.setup()
             self.window.show_view(view)
 
@@ -127,12 +127,12 @@ class GameOver(arcade.View):
         if len(buttons) > 0:
             global num_internships
             num_internships = "100"
-            view = LevelOneView()
+            view = LevelView()
             view.setup()
             self.window.show_view(view)
 
 
-class LevelOneView(arcade.View):
+class LevelView(arcade.View):
     def __init__(self):
         super().__init__()
 
@@ -178,6 +178,9 @@ class LevelOneView(arcade.View):
         # drawing internship count + icon
         self.internships_list.draw()
         arcade.draw_text(num_internships, self.internships.center_x * 0.98, self.internships.center_y * 0.99,
+                         arcade.color.BLACK, font_size=15)
+
+        arcade.draw_text("Level "+str(level), SCREEN_WIDTH*0.05, SCREEN_HEIGHT * 0.9,
                          arcade.color.BLACK, font_size=15)
 
         # drawing other graphics
@@ -229,14 +232,16 @@ class HackWinView(arcade.View):
         arcade.draw_lrwh_rectangle_textured(0, 0,
                                             SCREEN_WIDTH, SCREEN_HEIGHT,
                                             self.background)
-        arcade.draw_text("Successful Hacking!", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 + 150, arcade.color.WHITE,
+        arcade.draw_text("Successful Hacking!", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 + 200, arcade.color.WHITE,
+                         font_size=50, anchor_x="center")
+        arcade.draw_text("Level Up!", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 + 150, arcade.color.WHITE,
                          font_size=50, anchor_x="center")
         self.menu_list.draw()
 
     def on_mouse_press(self, x, y, button, key_modifiers):
         buttons = arcade.get_sprites_at_point((x, y), self.menu_list)
         if len(buttons) > 0:
-            view = LevelOneView()
+            view = LevelView()
             view.setup()
             self.window.show_view(view)
 
@@ -268,7 +273,7 @@ class HackLoseView(arcade.View):
     def on_mouse_press(self, x, y, button, key_modifiers):
         buttons = arcade.get_sprites_at_point((x, y), self.menu_list)
         if len(buttons) > 0:
-            view = LevelOneView()
+            view = LevelView()
             view.setup()
             self.window.show_view(view)
 
@@ -375,7 +380,7 @@ class HackingView1(arcade.View):
         # if user clicks on menu button
         menu_buttons = arcade.get_sprites_at_point((x, y), self.menu_list)
         if menu_buttons:
-            view = LevelOneView()
+            view = LevelView()
             view.setup()
             self.window.show_view(view)
 
@@ -526,7 +531,7 @@ class HackingView2(arcade.View):
         # if menu button is clicked
         menu_buttons = arcade.get_sprites_at_point((x, y), self.menu_list)
         if len(menu_buttons) > 0:
-            view = LevelOneView()
+            view = LevelView()
             view.setup()
             self.window.show_view(view)
         # if user clicks on code blocks
@@ -587,7 +592,7 @@ class CombatGameOver(arcade.View):
     def on_mouse_press(self, x, y, button, key_modifiers):
         buttons = arcade.get_sprites_at_point((x, y), self.menu_list)
         if len(buttons) > 0:
-            view = LevelOneView()
+            view = LevelView()
             view.setup()
             self.window.show_view(view)
 
@@ -618,7 +623,7 @@ class CombatWinView(arcade.View):
     def on_mouse_press(self, x, y, button, key_modifiers):
         buttons = arcade.get_sprites_at_point((x, y), self.menu_list)
         if len(buttons) > 0:
-            view = LevelOneView()
+            view = LevelView()
             view.setup()
             self.window.show_view(view)
 
