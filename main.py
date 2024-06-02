@@ -576,7 +576,7 @@ class HackingView1(arcade.View):
                          arcade.color.BLACK, font_size=15)
 
         # drawing programming question
-        question_text = "Write a program that asks the user for the number of tiles and then prints out the maximum side length. You may assume that the user will only type integers that are less than ten thousand. Once your program has read the user’s input and printed the largest square, your program stops executing."
+        question_text = "Write a program that asks the user for the number of tiles, and then prints out the side length of the largest possible square built with the tiles. You may assume that the user will only type integers that are less than ten thousand."
         arcade.draw_text(question_text, SCREEN_WIDTH * 0.1, SCREEN_HEIGHT * 0.85, arcade.color.BLACK, font_size=15,
                          multiline=True, width=SCREEN_WIDTH * 0.75)
 
@@ -742,7 +742,7 @@ class HackingView2(arcade.View):
                          arcade.color.BLACK, font_size=15)
 
         # drawing hacking question
-        question_text = "Each instruction is a sequence of five digits which represents a direction to turn and the number of steps to take to reach the top-secret safe."
+        question_text = "Decode an instruction that is a sequence of five digits which represents a direction to turn and the number of steps to take. The first two digits represent the direction: if their sum is odd, turn left. If their sum is even, turn right. The last 3 digits represent the number of steps."
         arcade.draw_text(question_text, SCREEN_WIDTH * 0.1, SCREEN_HEIGHT * 0.85, arcade.color.BLACK, font_size=15,
                          multiline=True, width=SCREEN_WIDTH * 0.75)
 
