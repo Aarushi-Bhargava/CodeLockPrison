@@ -550,8 +550,8 @@ class HackingView1(arcade.View):
         # submit code button
         self.submit_list = arcade.SpriteList()
         self.submit = arcade.Sprite("CodeLockPrison/submit.PNG", scale=0.04)
-        self.submit.center_x = SCREEN_WIDTH * 0.48
-        self.submit.center_y = SCREEN_HEIGHT * 0.21
+        self.submit.center_x = SCREEN_WIDTH * 0.75
+        self.submit.center_y = SCREEN_HEIGHT * 0.7
         self.submit_list.append(self.submit)
 
         # code blocks
@@ -560,8 +560,8 @@ class HackingView1(arcade.View):
             block = arcade.Sprite("CodeLockPrison/pixelated button bg.png", scale=1)
             block.width = 400  # Set your desired width
             block.height = 200  # Set your desired height
-            block.center_x = SCREEN_WIDTH * 0.3 + (i % 2) * 350
-            block.center_y = SCREEN_HEIGHT * 0.6 - (i // 2) * 150
+            block.center_x = SCREEN_WIDTH * 0.75
+            block.center_y = SCREEN_HEIGHT * 0.6 - (i / 2) * 150
             block.index = i
             block.text = text
             self.blocks.append(block)
@@ -598,7 +598,9 @@ class HackingView1(arcade.View):
                              anchor_x="center", anchor_y="center")
 
         # drawing actual code
-        arcade.draw_text(self.code_display, SCREEN_WIDTH * 0.1, SCREEN_HEIGHT * 0.4, arcade.color.BLACK, font_size=15,
+        arcade.draw_text("Program", SCREEN_WIDTH * 0.1, SCREEN_HEIGHT * 0.65, arcade.color.BLACK, font_size=25,
+                         multiline=True, width=SCREEN_WIDTH * 0.75)
+        arcade.draw_text(self.code_display, SCREEN_WIDTH * 0.1, SCREEN_HEIGHT * 0.5, arcade.color.BLACK, font_size=15,
                          multiline=True, width=SCREEN_WIDTH * 0.75)
 
     def on_mouse_press(self, x, y, button, key_modifiers):
@@ -726,8 +728,8 @@ class HackingView2(arcade.View):
             block = arcade.Sprite("CodeLockPrison/pixelated button bg.png", scale=1)
             block.width = 450  # Set your desired width
             block.height = 200  # Set your desired height
-            block.center_x = SCREEN_WIDTH * 0.3 + (i % 2) * 350
-            block.center_y = SCREEN_HEIGHT * 0.9 - (i // 2) * 100
+            block.center_x = SCREEN_WIDTH * 0.55 + (i % 2) * 350
+            block.center_y = SCREEN_HEIGHT * 0.65 - (i // 2) * 50
             block.index = i
             block.text = text
             self.blocks.append(block)
@@ -760,9 +762,11 @@ class HackingView2(arcade.View):
         for block in self.blocks:
             arcade.draw_text(block.text, block.center_x, block.center_y, arcade.color.WHITE, font_size=10,
                              anchor_x="center", anchor_y="center")
-
-        arcade.draw_text(self.code_display, SCREEN_WIDTH * 0.1, SCREEN_HEIGHT * 0.4, arcade.color.BLACK, font_size=15,
+        # drawing actual code
+        arcade.draw_text("Program", SCREEN_WIDTH * 0.1, SCREEN_HEIGHT * 0.65, arcade.color.BLACK, font_size=25,
                          multiline=True, width=SCREEN_WIDTH * 0.75)
+        arcade.draw_text(self.code_display, SCREEN_WIDTH * 0.1, SCREEN_HEIGHT * 0.55, arcade.color.BLACK,
+                         font_size=15, multiline=True, width=SCREEN_WIDTH * 0.3)
 
     def on_mouse_press(self, x, y, button, key_modifiers):
 
