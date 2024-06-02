@@ -282,6 +282,8 @@ class GameOver(arcade.View):
 
         arcade.draw_text("Game Over", SCREEN_WIDTH / 2, SCREEN_HEIGHT * 0.9, arcade.color.WHITE, font_size=50,
                          anchor_x="center")
+        arcade.draw_text("You have no more internships", SCREEN_WIDTH / 2, SCREEN_HEIGHT * 0.8, arcade.color.WHITE, font_size=50,
+                         anchor_x="center")
 
         self.button_list.draw()
 
@@ -634,14 +636,15 @@ class HackingView1(arcade.View):
         submit_option = arcade.get_sprites_at_point((x, y), self.submit_list)
         if submit_option:
             if self.current_order == self.correct_order:
+                global level
+                # gain internships for beating level
+                num_internships = str(int(num_internships) + (level * 100))
+
                 view = HackWinView()
                 view.setup()
                 self.window.show_view(view)
                 arcade.draw_text("Correct", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, arcade.color.BLACK, font_size=50,
                                  anchor_x="center")
-                global level
-                # gain internships for beating level
-                num_internships = str(int(num_internships) + (level * 100))
 
                 #switching levels
                 level = 2
@@ -671,20 +674,17 @@ class HackingView2(arcade.View):
         self.blocks = []
         self.block_texts = [
             "secret_code = input()",  # User input
-            "secret_code[0]",  # Slice array function
-            "secret_code[1]",  # Slice array function
             "direction_sum = int(secret_code[0]) + int(secret_code[1])",  # Variable block
             "if direction_sum % 2 == 1:",  # If statement
             "direction = 'left'",  # Variable block (direction)
             "else:",  # Else statement
             "direction = 'right'",  # Variable block (direction)
-            "secret_code[2:]",  # Slice array function (3rd to 5th digit)
             "num_steps = secret_code[2:]",  # Variable block (num_steps)
             "print(direction + num_steps)"  # Output
         ]
 
         # checking answers
-        self.correct_order = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        self.correct_order = [0, 1, 2, 3, 4, 5, 6, 7]
         self.current_order = []
 
         # text on blocks
@@ -728,7 +728,7 @@ class HackingView2(arcade.View):
             block.width = 450  # Set your desired width
             block.height = 200  # Set your desired height
             block.center_x = SCREEN_WIDTH * 0.3 + (i % 2) * 350
-            block.center_y = SCREEN_HEIGHT * 0.9 - (i // 2) * 150
+            block.center_y = SCREEN_HEIGHT * 0.9 - (i // 2) * 100
             block.index = i
             block.text = text
             self.blocks.append(block)
@@ -798,12 +798,15 @@ class HackingView2(arcade.View):
         submit_option = arcade.get_sprites_at_point((x, y), self.submit_list)
         if submit_option:
             if self.current_order == self.correct_order:
+                global level
+                # gain internships for beating level
+                num_internships = str(int(num_internships) + (level * 100))
+
                 view = HackWinView()
                 view.setup()
                 self.window.show_view(view)
                 arcade.draw_text("Correct", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, arcade.color.BLACK, font_size=50,
                                  anchor_x="center")
-                global level
                 level = 3
             else:
                 view = HackLoseView()
