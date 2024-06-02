@@ -107,6 +107,7 @@ class MenuView(arcade.View):
         self.back_list = None
 
         self.story_list = None
+        self.instructions_list = None
 
         self.view_mode = 0
 
@@ -115,9 +116,33 @@ class MenuView(arcade.View):
 
         self.story_list = arcade.SpriteList()
         self.story = arcade.Sprite("CodeLockPrison/pixelated button bg.png")
-        self.story.center_x = SCREEN_WIDTH / 2
+        self.story.center_x = SCREEN_WIDTH / 4
         self.story.center_y = SCREEN_HEIGHT / 2
         self.story_list.append(self.story)
+
+        self.instructions_list = arcade.SpriteList()
+        self.instructions = arcade.Sprite("CodeLockPrison/pixelated button bg.png")
+        self.instructions.center_x = SCREEN_WIDTH * 0.75
+        self.instructions.center_y = SCREEN_HEIGHT / 2
+        self.instructions_list.append(self.instructions)
+
+        self.hacking_list = arcade.SpriteList()
+        self.hacking = arcade.Sprite("CodeLockPrison/pixelated button bg.png")
+        self.hacking.center_x = SCREEN_WIDTH * 0.25
+        self.hacking.center_y = SCREEN_HEIGHT * 0.4
+        self.hacking_list.append(self.hacking)
+
+        self.combat_list = arcade.SpriteList()
+        self.combat = arcade.Sprite("CodeLockPrison/pixelated button bg.png")
+        self.combat.center_x = SCREEN_WIDTH * 0.75
+        self.combat.center_y = SCREEN_HEIGHT * 0.4
+        self.combat_list.append(self.combat)
+
+        self.internship_list = arcade.SpriteList()
+        self.internship = arcade.Sprite("CodeLockPrison/pixelated button bg.png")
+        self.internship.center_x = SCREEN_WIDTH * 0.5
+        self.internship.center_y = SCREEN_HEIGHT * 0.2
+        self.internship_list.append(self.internship)
 
         # button to return to homepage
         self.back_list = arcade.SpriteList()
@@ -133,28 +158,106 @@ class MenuView(arcade.View):
                                             SCREEN_WIDTH, SCREEN_HEIGHT,
                                             self.background)
 
+        # main menu page view
         if self.view_mode == 0:
             self.story_list.draw()
+            self.instructions_list.draw()
             arcade.draw_text("Game Story", self.story.center_x, self.story.center_y, arcade.color.BLACK, font_size=40, anchor_y="center",
                              anchor_x="center")
-        elif self.view_mode == 1:
+            arcade.draw_text("How To Play", self.instructions.center_x, self.instructions.center_y, arcade.color.BLACK, font_size=40,
+                             anchor_y="center",
+                             anchor_x="center")
+        # view for game story page
+        if self.view_mode == 1:
             arcade.draw_text("You are a prisoner with exceptional coding skills, and your goal is to escape from jail. To succeed, you'll need to hack into systems and outsmart prison guards. Each hacking problem you solve brings you closer to freedom. Are you ready to embark on this epic escape?",
                              SCREEN_WIDTH*0.2, SCREEN_HEIGHT/2, arcade.color.WHITE, font_size=20, anchor_y="center",
                              multiline=True, width=SCREEN_WIDTH * 0.75)
+        # view for intructions page
+        if self.view_mode == 2:
+            arcade.draw_text(
+                "You will be switching between two other scenes to escape: the hacking scene and the combat scene. You can access the hacking scene by clicking the computer icon that says, “HACK.” You can access the combat scene by clicking on the guard (the cute looking robot).",
+                SCREEN_WIDTH * 0.2, SCREEN_HEIGHT * 0.75, arcade.color.WHITE, font_size=20, anchor_y="center",
+                multiline=True, width=SCREEN_WIDTH * 0.75)
+
+            self.hacking_list.draw()
+            self.combat_list.draw()
+            self.internship_list.draw()
+
+            arcade.draw_text("Hacking", self.hacking.center_x, self.hacking.center_y, arcade.color.BLACK,
+                             font_size=40,
+                             anchor_y="center",
+                             anchor_x="center")
+            arcade.draw_text("Combat", self.combat.center_x, self.combat.center_y, arcade.color.BLACK,
+                             font_size=40,
+                             anchor_y="center",
+                             anchor_x="center")
+            arcade.draw_text("Internships", self.internship.center_x, self.internship.center_y, arcade.color.BLACK,
+                             font_size=40,
+                             anchor_y="center",
+                             anchor_x="center")
+
+        # menu view about block code game
+        if self.view_mode == 3:
+            arcade.draw_text(
+                "Use the code blocks provided on the screen to solve the displayed coding problem. If you click on a code block, its corresponding code will display on the whiteboard. Click on the code blocks in the correct order to solve the question and pass the level! Press the red 'HACK' button to submit your code once you think you have the right solution!",
+                SCREEN_WIDTH * 0.2, SCREEN_HEIGHT * 0.5, arcade.color.WHITE, font_size=20, anchor_y="center",
+                multiline=True, width=SCREEN_WIDTH * 0.75)
+
+        # menu view about combat game
+        if self.view_mode == 4:
+            arcade.draw_text(
+                "You can earn internships if you dodge all the projectiles thrown by the guard. If you get hit, you lose a life. You have 3 lives, dodge all the projectiles within the time constraint and without losing all your lives to earn internships!",
+                SCREEN_WIDTH * 0.2, SCREEN_HEIGHT * 0.5, arcade.color.WHITE, font_size=20, anchor_y="center",
+                multiline=True, width=SCREEN_WIDTH * 0.75)
+
+        # menu view about internships
+        if self.view_mode == 5:
+            arcade.draw_text(
+                "You will need internships to purchase code blocks to use in your blockcode solution. You can gain internships in two ways: ",
+                SCREEN_WIDTH * 0.2, SCREEN_HEIGHT * 0.8, arcade.color.WHITE, font_size=20, anchor_y="center",
+                multiline=True, width=SCREEN_WIDTH * 0.75)
+            arcade.draw_text(
+                "1) Passing a level (solving the level’s question) --- # of internships you gain depends on the level’s difficulty",
+                SCREEN_WIDTH * 0.2, SCREEN_HEIGHT * 0.8 - 100, arcade.color.WHITE, font_size=20, anchor_y="center",
+                multiline=True, width=SCREEN_WIDTH * 0.75)
+            arcade.draw_text(
+                "2) Winning a combat challenge --- 100 internships. You can also lose 50 internships if you lose the combat challenge.",
+                SCREEN_WIDTH * 0.2, SCREEN_HEIGHT * 0.8 - 200, arcade.color.WHITE, font_size=20, anchor_y="center",
+                multiline=True, width=SCREEN_WIDTH * 0.75)
+            arcade.draw_text(
+                "If your internship count reaches zero, you lose the game and will have to start over. You will start off with 100 internships.",
+                SCREEN_WIDTH * 0.2, SCREEN_HEIGHT * 0.8 - 300, arcade.color.WHITE, font_size=20, anchor_y="center",
+                multiline=True, width=SCREEN_WIDTH * 0.75)
+
 
         self.back_list.draw()
 
     def on_mouse_press(self, x, y, button, key_modifiers):
-        story = arcade.get_sprites_at_point((x, y), self.story_list)
-        if story:
-            self.view_mode = 1
 
+        story = arcade.get_sprites_at_point((x, y), self.story_list)
+        instructions = arcade.get_sprites_at_point((x, y), self.instructions_list)
+        hacking = arcade.get_sprites_at_point((x, y), self.hacking_list)
+        combat = arcade.get_sprites_at_point((x, y), self.combat_list)
+        internships = arcade.get_sprites_at_point((x, y), self.internship_list)
         back = arcade.get_sprites_at_point((x, y), self.back_list)
-        if back:
+
+        if story and self.view_mode == 0:
+            self.view_mode = 1
+        elif instructions and self.view_mode == 0:
+            self.view_mode = 2
+        elif hacking and self.view_mode == 2:
+            self.view_mode = 3
+        elif combat and self.view_mode == 2:
+            self.view_mode = 4
+        elif internships and self.view_mode == 2:
+            self.view_mode = 5
+        elif back:
             if self.view_mode == 0:
                 view = LevelView()
                 view.setup()
                 self.window.show_view(view)
+            elif self.view_mode > 2:
+                self.view_mode = 2
             else:
                 self.view_mode = 0
 
@@ -626,8 +729,6 @@ class HackingView2(arcade.View):
             block.height = 200  # Set your desired height
             block.center_x = SCREEN_WIDTH * 0.3 + (i % 2) * 350
             block.center_y = SCREEN_HEIGHT * 0.9 - (i // 2) * 150
-            # block.center_x = SCREEN_WIDTH * 0.3 + (i % 2) * 350
-            # block.center_y = SCREEN_HEIGHT * 0.9 - (i // 2) * 150
             block.index = i
             block.text = text
             self.blocks.append(block)
