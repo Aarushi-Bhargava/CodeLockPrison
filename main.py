@@ -163,21 +163,21 @@ class MenuView(arcade.View):
             self.story_list.draw()
             self.instructions_list.draw()
             arcade.draw_text("Game Story", self.story.center_x, self.story.center_y, arcade.color.BLACK, font_size=40, anchor_y="center",
-                             anchor_x="center")
+                             anchor_x="center", font_name="Consolas")
             arcade.draw_text("How To Play", self.instructions.center_x, self.instructions.center_y, arcade.color.BLACK, font_size=40,
                              anchor_y="center",
-                             anchor_x="center")
+                             anchor_x="center", font_name="Consolas")
         # view for game story page
         if self.view_mode == 1:
             arcade.draw_text("You are a prisoner with exceptional coding skills, and your goal is to escape from jail. To succeed, you'll need to hack into systems and outsmart prison guards. Each hacking problem you solve brings you closer to freedom. Are you ready to embark on this epic escape?",
                              SCREEN_WIDTH*0.2, SCREEN_HEIGHT/2, arcade.color.WHITE, font_size=20, anchor_y="center",
-                             multiline=True, width=SCREEN_WIDTH * 0.75)
+                             multiline=True, width=SCREEN_WIDTH * 0.75, font_name="Consolas")
         # view for intructions page
         if self.view_mode == 2:
             arcade.draw_text(
                 "You will be switching between two other scenes to escape: the hacking scene and the combat scene. You can access the hacking scene by clicking the computer icon that says, “HACK.” You can access the combat scene by clicking on the guard (the cute looking robot).",
                 SCREEN_WIDTH * 0.2, SCREEN_HEIGHT * 0.75, arcade.color.WHITE, font_size=20, anchor_y="center",
-                multiline=True, width=SCREEN_WIDTH * 0.75)
+                multiline=True, width=SCREEN_WIDTH * 0.75, font_name="Consolas")
 
             self.hacking_list.draw()
             self.combat_list.draw()
@@ -186,48 +186,48 @@ class MenuView(arcade.View):
             arcade.draw_text("Hacking", self.hacking.center_x, self.hacking.center_y, arcade.color.BLACK,
                              font_size=40,
                              anchor_y="center",
-                             anchor_x="center")
+                             anchor_x="center", font_name="Consolas")
             arcade.draw_text("Combat", self.combat.center_x, self.combat.center_y, arcade.color.BLACK,
                              font_size=40,
                              anchor_y="center",
-                             anchor_x="center")
+                             anchor_x="center", font_name="Consolas")
             arcade.draw_text("Internships", self.internship.center_x, self.internship.center_y, arcade.color.BLACK,
                              font_size=40,
                              anchor_y="center",
-                             anchor_x="center")
+                             anchor_x="center", font_name="Consolas")
 
         # menu view about block code game
         if self.view_mode == 3:
             arcade.draw_text(
                 "Use the code blocks provided on the screen to solve the displayed coding problem. If you click on a code block, its corresponding code will display on the whiteboard. Click on the code blocks in the correct order to solve the question and pass the level! Press the red 'HACK' button to submit your code once you think you have the right solution!",
                 SCREEN_WIDTH * 0.2, SCREEN_HEIGHT * 0.5, arcade.color.WHITE, font_size=20, anchor_y="center",
-                multiline=True, width=SCREEN_WIDTH * 0.75)
+                multiline=True, width=SCREEN_WIDTH * 0.75, font_name="Consolas")
 
         # menu view about combat game
         if self.view_mode == 4:
             arcade.draw_text(
                 "You can earn internships if you dodge all the projectiles thrown by the guard. If you get hit, you lose a life. You have 3 lives, dodge all the projectiles within the time constraint and without losing all your lives to earn internships!",
                 SCREEN_WIDTH * 0.2, SCREEN_HEIGHT * 0.5, arcade.color.WHITE, font_size=20, anchor_y="center",
-                multiline=True, width=SCREEN_WIDTH * 0.75)
+                multiline=True, width=SCREEN_WIDTH * 0.75, font_name="Consolas")
 
         # menu view about internships
         if self.view_mode == 5:
             arcade.draw_text(
                 "You will need internships to purchase code blocks to use in your blockcode solution. You can gain internships in two ways: ",
                 SCREEN_WIDTH * 0.2, SCREEN_HEIGHT * 0.8, arcade.color.WHITE, font_size=20, anchor_y="center",
-                multiline=True, width=SCREEN_WIDTH * 0.75)
+                multiline=True, width=SCREEN_WIDTH * 0.75, font_name="Consolas")
             arcade.draw_text(
                 "1) Passing a level (solving the level’s question) --- # of internships you gain depends on the level’s difficulty",
                 SCREEN_WIDTH * 0.2, SCREEN_HEIGHT * 0.8 - 100, arcade.color.WHITE, font_size=20, anchor_y="center",
-                multiline=True, width=SCREEN_WIDTH * 0.75)
+                multiline=True, width=SCREEN_WIDTH * 0.75, font_name="Consolas")
             arcade.draw_text(
                 "2) Winning a combat challenge --- 100 internships. You can also lose 50 internships if you lose the combat challenge.",
                 SCREEN_WIDTH * 0.2, SCREEN_HEIGHT * 0.8 - 200, arcade.color.WHITE, font_size=20, anchor_y="center",
-                multiline=True, width=SCREEN_WIDTH * 0.75)
+                multiline=True, width=SCREEN_WIDTH * 0.75, font_name="Consolas")
             arcade.draw_text(
                 "If your internship count reaches zero, you lose the game and will have to start over. You will start off with 100 internships.",
                 SCREEN_WIDTH * 0.2, SCREEN_HEIGHT * 0.8 - 300, arcade.color.WHITE, font_size=20, anchor_y="center",
-                multiline=True, width=SCREEN_WIDTH * 0.75)
+                multiline=True, width=SCREEN_WIDTH * 0.75, font_name="Consolas")
 
 
         self.back_list.draw()
@@ -281,9 +281,9 @@ class GameOver(arcade.View):
         self.clear()
 
         arcade.draw_text("Game Over", SCREEN_WIDTH / 2, SCREEN_HEIGHT * 0.9, arcade.color.WHITE, font_size=50,
-                         anchor_x="center")
+                         anchor_x="center", font_name="Consolas")
         arcade.draw_text("You have no more internships", SCREEN_WIDTH / 2, SCREEN_HEIGHT * 0.8, arcade.color.WHITE, font_size=50,
-                         anchor_x="center")
+                         anchor_x="center", font_name="Consolas")
 
         self.button_list.draw()
 
@@ -353,10 +353,10 @@ class LevelView(arcade.View):
         # drawing internship count + icon
         self.internships_list.draw()
         arcade.draw_text(num_internships, self.internships.center_x * 0.98, self.internships.center_y * 0.99,
-                         arcade.color.BLACK, font_size=15)
+                         arcade.color.BLACK, font_size=15, font_name="Consolas")
 
         arcade.draw_text("Level "+str(level), SCREEN_WIDTH*0.9, SCREEN_HEIGHT * 0.04,
-                         arcade.color.BLACK, font_size=15)
+                         arcade.color.BLACK, font_size=15, font_name="Consolas")
 
         # drawing other graphics
         self.menu_list.draw()
@@ -424,9 +424,9 @@ class HackWinView(arcade.View):
                                             SCREEN_WIDTH, SCREEN_HEIGHT,
                                             self.background)
         arcade.draw_text("Successful Hacking!", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 + 200, arcade.color.WHITE,
-                         font_size=50, anchor_x="center")
+                         font_size=50, anchor_x="center", font_name="Consolas")
         arcade.draw_text("Level Up!", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 + 150, arcade.color.WHITE,
-                         font_size=50, anchor_x="center")
+                         font_size=50, anchor_x="center", font_name="Consolas")
         self.menu_list.draw()
         self.back_list.draw()
 
@@ -473,7 +473,7 @@ class HackLoseView(arcade.View):
                                             SCREEN_WIDTH, SCREEN_HEIGHT,
                                             self.background)
         arcade.draw_text("Unsuccessful Hacking :/ ", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 + 150, arcade.color.WHITE,
-                         font_size=50, anchor_x="center")
+                         font_size=50, anchor_x="center", font_name="Consolas")
         self.menu_list.draw()
         self.back_list.draw()
 
@@ -573,12 +573,12 @@ class HackingView1(arcade.View):
         # drawing internship count + icon
         self.internships_list.draw()
         arcade.draw_text(num_internships, self.internships.center_x * 0.98, self.internships.center_y * 0.99,
-                         arcade.color.BLACK, font_size=15)
+                         arcade.color.BLACK, font_size=15, font_name="Consolas")
 
         # drawing programming question
         question_text = "Write a program that asks the user for the number of tiles, and then prints out the side length of the largest possible square built with the tiles. You may assume that the user will only type integers that are less than ten thousand."
         arcade.draw_text(question_text, SCREEN_WIDTH * 0.1, SCREEN_HEIGHT * 0.85, arcade.color.BLACK, font_size=15,
-                         multiline=True, width=SCREEN_WIDTH * 0.75)
+                         multiline=True, width=SCREEN_WIDTH * 0.75, font_name="Consolas")
 
         # drawing home button
         self.menu_list.draw()
@@ -595,13 +595,13 @@ class HackingView1(arcade.View):
         # drawing text onto code blocks
         for block in self.blocks:
             arcade.draw_text(block.text, block.center_x, block.center_y, arcade.color.WHITE, font_size=10,
-                             anchor_x="center", anchor_y="center")
+                             anchor_x="center", anchor_y="center", font_name="Consolas")
 
         # drawing actual code
         arcade.draw_text("Program", SCREEN_WIDTH * 0.1, SCREEN_HEIGHT * 0.65, arcade.color.BLACK, font_size=25,
-                         multiline=True, width=SCREEN_WIDTH * 0.75)
-        arcade.draw_text(self.code_display, SCREEN_WIDTH * 0.1, SCREEN_HEIGHT * 0.5, arcade.color.BLACK, font_size=15,
-                         multiline=True, width=SCREEN_WIDTH * 0.75)
+                         multiline=True, width=SCREEN_WIDTH * 0.75, font_name="Consolas")
+        arcade.draw_text(self.code_display, SCREEN_WIDTH * 0.1, SCREEN_HEIGHT * 0.5, arcade.color.BLACK, font_size=10,
+                         multiline=True, width=SCREEN_WIDTH * 0.75, font_name="Consolas")
 
     def on_mouse_press(self, x, y, button, key_modifiers):
 
@@ -646,7 +646,7 @@ class HackingView1(arcade.View):
                 view.setup()
                 self.window.show_view(view)
                 arcade.draw_text("Correct", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, arcade.color.BLACK, font_size=50,
-                                 anchor_x="center")
+                                 anchor_x="center", font_name="Consolas")
 
                 #switching levels
                 level = 2
@@ -741,12 +741,12 @@ class HackingView2(arcade.View):
         # drawing internship count + icon
         self.internships_list.draw()
         arcade.draw_text(num_internships, self.internships.center_x * 0.98, self.internships.center_y * 0.99,
-                         arcade.color.BLACK, font_size=15)
+                         arcade.color.BLACK, font_size=15, font_name="Consolas")
 
         # drawing hacking question
         question_text = "Decode an instruction that is a sequence of five digits which represents a direction to turn and the number of steps to take. The first two digits represent the direction: if their sum is odd, turn left. If their sum is even, turn right. The last 3 digits represent the number of steps."
         arcade.draw_text(question_text, SCREEN_WIDTH * 0.1, SCREEN_HEIGHT * 0.85, arcade.color.BLACK, font_size=15,
-                         multiline=True, width=SCREEN_WIDTH * 0.75)
+                         multiline=True, width=SCREEN_WIDTH * 0.75, font_name="Consolas")
 
         # drawing menu button
         self.menu_list.draw()
@@ -761,12 +761,12 @@ class HackingView2(arcade.View):
         # drawing text on code blocks
         for block in self.blocks:
             arcade.draw_text(block.text, block.center_x, block.center_y, arcade.color.WHITE, font_size=10,
-                             anchor_x="center", anchor_y="center")
+                             anchor_x="center", anchor_y="center", font_name="Consolas")
         # drawing actual code
         arcade.draw_text("Program", SCREEN_WIDTH * 0.1, SCREEN_HEIGHT * 0.65, arcade.color.BLACK, font_size=25,
-                         multiline=True, width=SCREEN_WIDTH * 0.75)
+                         multiline=True, width=SCREEN_WIDTH * 0.75, font_name="Consolas")
         arcade.draw_text(self.code_display, SCREEN_WIDTH * 0.1, SCREEN_HEIGHT * 0.55, arcade.color.BLACK,
-                         font_size=15, multiline=True, width=SCREEN_WIDTH * 0.3)
+                         font_size=10, multiline=True, width=SCREEN_WIDTH * 0.3, font_name="Consolas")
 
     def on_mouse_press(self, x, y, button, key_modifiers):
 
@@ -809,7 +809,7 @@ class HackingView2(arcade.View):
                 view.setup()
                 self.window.show_view(view)
                 arcade.draw_text("Correct", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, arcade.color.BLACK, font_size=50,
-                                 anchor_x="center")
+                                 anchor_x="center", font_name="Consolas")
                 level = 3
             else:
                 view = HackLoseView()
@@ -845,7 +845,7 @@ class CombatGameOver(arcade.View):
                                             SCREEN_WIDTH, SCREEN_HEIGHT,
                                             self.background)
         arcade.draw_text("Game Over", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, arcade.color.WHITE, font_size=50,
-                         anchor_x="center")
+                         anchor_x="center", font_name="Consolas")
         self.menu_list.draw()
         self.back_list.draw()
 
@@ -890,7 +890,7 @@ class CombatWinView(arcade.View):
                                             SCREEN_WIDTH, SCREEN_HEIGHT,
                                             self.background)
         arcade.draw_text("You Win!", SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, arcade.color.WHITE, font_size=50,
-                         anchor_x="center")
+                         anchor_x="center", font_name="Consolas")
         self.menu_list.draw()
         self.back_list.draw()
 
