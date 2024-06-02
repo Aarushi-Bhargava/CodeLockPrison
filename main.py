@@ -511,13 +511,13 @@ class HackingView1(arcade.View):
         self.blocks = []
         self.block_texts = [
             "num_tiles = int(input())",  # User Input
+            "print(max_side_length)",  # Output
             "max_side_length = math.sqrt(num_tiles)",  # Square Root Function
             "max_side_length = math.floor(max_side_length)",  # Round Down Function
-            "print(max_side_length)"  # Output
         ]
 
         # checking order of code blocks
-        self.correct_order = [0, 1, 2, 3]
+        self.correct_order = [0, 2, 3, 1]
         self.current_order = []
 
         # displaying the written code
@@ -663,7 +663,6 @@ class HackingView2(arcade.View):
         self.menu_list = None
         self.back_list = None
 
-
         # internships tracker
         self.internships_list = None
 
@@ -673,18 +672,18 @@ class HackingView2(arcade.View):
         # code blocks
         self.blocks = []
         self.block_texts = [
-            "secret_code = input()",  # User input
             "direction_sum = int(secret_code[0]) + int(secret_code[1])",  # Variable block
             "if direction_sum % 2 == 1:",  # If statement
+            "num_steps = secret_code[2:]",  # Variable block (num_steps)
+            "direction = 'right'",  # Variable block (direction)
             "direction = 'left'",  # Variable block (direction)
             "else:",  # Else statement
-            "direction = 'right'",  # Variable block (direction)
-            "num_steps = secret_code[2:]",  # Variable block (num_steps)
-            "print(direction + num_steps)"  # Output
+            "print(direction + num_steps)",  # Output
+            "secret_code = input()",  # User input
         ]
 
         # checking answers
-        self.correct_order = [0, 1, 2, 3, 4, 5, 6, 7]
+        self.correct_order = [7, 0, 1, 4, 5, 3, 2, 6]
         self.current_order = []
 
         # text on blocks
