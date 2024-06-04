@@ -418,6 +418,13 @@ class HackWinView(arcade.View):
         self.menu.center_y = 550
         self.menu_list.append(self.menu)
 
+        # key
+        self.key_list = arcade.SpriteList()
+        self.key = arcade.Sprite("CodeLockPrison/pixel-old-key-for-games-free-vector-removebg-preview.png", scale=0.4)
+        self.key.center_x = SCREEN_WIDTH/2
+        self.key.center_y = SCREEN_HEIGHT/2
+        self.key_list.append(self.key)
+
     def on_draw(self):
         self.clear()
         arcade.draw_lrwh_rectangle_textured(0, 0,
@@ -429,6 +436,7 @@ class HackWinView(arcade.View):
                          font_size=50, anchor_x="center", font_name="Consolas")
         self.menu_list.draw()
         self.back_list.draw()
+        self.key_list.draw()
 
     def on_mouse_press(self, x, y, button, key_modifiers):
         buttons = arcade.get_sprites_at_point((x, y), self.back_list)
