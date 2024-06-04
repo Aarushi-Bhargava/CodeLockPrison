@@ -262,6 +262,42 @@ class MenuView(arcade.View):
                 self.view_mode = 0
 
 
+class WinView(arcade.View):
+    def __init__(self):
+        super().__init__()
+
+        arcade.set_background_color(arcade.color.BLACK)
+        self.button = None
+        self.button_list = None
+
+    def setup(self):
+        self.button_list = arcade.SpriteList()
+        self.button = arcade.Sprite("CodeLockPrison/play-button-neww.png")
+        self.button.center_x = SCREEN_WIDTH / 2
+        self.button.center_y = SCREEN_HEIGHT / 2
+        self.button_list.append(self.button)
+
+    def on_draw(self):
+        self.clear()
+
+        arcade.draw_text("Congratulations! You have escaped Code Lock Prison!", SCREEN_WIDTH / 2, SCREEN_HEIGHT * 0.9, arcade.color.WHITE, font_size=25,
+                         anchor_x="center", font_name="Consolas")
+        arcade.draw_text("Press the 'PLAY' button to play again!", SCREEN_WIDTH / 2, SCREEN_HEIGHT * 0.8, arcade.color.WHITE,
+                         font_size=25,
+                         anchor_x="center", font_name="Consolas")
+
+        self.button_list.draw()
+
+    def on_mouse_press(self, x, y, button, key_modifiers):
+        buttons = arcade.get_sprites_at_point((x, y), self.button_list)
+        if len(buttons) > 0:
+            global num_internships
+            num_internships = "100"
+            view = LevelView()
+            view.setup()
+            self.window.show_view(view)
+
+
 class GameOver(arcade.View):
     def __init__(self):
         super().__init__()
@@ -291,7 +327,9 @@ class GameOver(arcade.View):
         buttons = arcade.get_sprites_at_point((x, y), self.button_list)
         if len(buttons) > 0:
             global num_internships
+            global level
             num_internships = "100"
+            level = 1
             view = LevelView()
             view.setup()
             self.window.show_view(view)
@@ -388,6 +426,10 @@ class LevelView(arcade.View):
                 self.window.show_view(view)
             elif level == 2:
                 view = HackingView2()
+                view.setup()
+                self.window.show_view(view)
+            elif level == 3:
+                view = HackingView3()
                 view.setup()
                 self.window.show_view(view)
 
@@ -768,13 +810,13 @@ class HackingView2(arcade.View):
 
         # drawing text on code blocks
         for block in self.blocks:
-            arcade.draw_text(block.text, block.center_x, block.center_y, arcade.color.WHITE, font_size=10,
+            arcade.draw_text(block.text, block.center_x, block.center_y, arcade.color.WHITE, font_size=8,
                              anchor_x="center", anchor_y="center", font_name="Consolas")
         # drawing actual code
         arcade.draw_text("Program", SCREEN_WIDTH * 0.1, SCREEN_HEIGHT * 0.65, arcade.color.BLACK, font_size=25,
                          multiline=True, width=SCREEN_WIDTH * 0.75, font_name="Consolas")
         arcade.draw_text(self.code_display, SCREEN_WIDTH * 0.1, SCREEN_HEIGHT * 0.55, arcade.color.BLACK,
-                         font_size=5, multiline=True, width=SCREEN_WIDTH * 0.3, font_name="Consolas")
+                         font_size=10, multiline=True, width=SCREEN_WIDTH * 0.3, font_name="Consolas")
 
     def on_mouse_press(self, x, y, button, key_modifiers):
 
@@ -824,6 +866,178 @@ class HackingView2(arcade.View):
                 view.setup()
                 self.window.show_view(view)
 
+class HackingView3(arcade.View):
+    def __init__(self):
+        super().__init__()
+        # button to return to homepage
+        self.menu_list = None
+        self.back_list = None
+
+        # internships tracker
+        self.internships_list = None
+
+        # submitting code button
+        self.submit_button_list = None
+
+        # code blocks
+        self.blocks = []
+        self.code_display = ""
+        self.block_texts = [
+            "if password[i-1] == alphabet[a]:",  # If statement
+            "for a in range(len(alphabet)-1):",  # For loop (for alphabet)
+            "print(\"\".join(encoded_password))",  # Output
+            "letter = alphabet[a-shift_num]",  # Variable block
+            "\"\".join(encoded_password)",  # Join function
+            "for i in range(1, len(password)+1):",  # For loop (for password)
+            "encoded_password.append(letter)",  # Append function
+            "shift_num = i**2",  # Variable block (shift_num)
+            "password = input()",  # User input
+        ]
+        self.correct_order = [8, 5, 7, 1, 0, 3, 6, 4, 2]
+        self.current_order = []
+
+    def setup(self):
+        self.background = arcade.load_texture("CodeLockPrison/IMG_3707.PNG")
+
+        # button to return to homepage
+        self.back_list = arcade.SpriteList()
+        self.back = arcade.Sprite("CodeLockPrison/back button.png", scale=0.2)
+        self.back.center_x = 220
+        self.back.center_y = 550
+        self.back_list.append(self.back)
+
+        # menu button
+        self.menu_list = arcade.SpriteList()
+        self.menu = arcade.Sprite("CodeLockPrison/menu icon.png", scale=0.4)
+        self.menu.center_x = 100
+        self.menu.center_y = 550
+        self.menu_list.append(self.menu)
+
+        # setting up internships count
+        self.internships_list = arcade.SpriteList()
+        self.internships = arcade.Sprite("CodeLockPrison/internship.png", scale=0.05)
+        self.internships.center_x = SCREEN_WIDTH * 0.95
+        self.internships.center_y = SCREEN_HEIGHT * 0.9
+        self.internships_list.append(self.internships)
+
+        # submit code button
+        self.submit_list = arcade.SpriteList()
+        self.submit = arcade.Sprite("CodeLockPrison/submit.PNG", scale=0.04)
+        self.submit.center_x = SCREEN_WIDTH * 0.8
+        self.submit.center_y = SCREEN_HEIGHT * 0.21
+        self.submit_list.append(self.submit)
+
+        # code blocks
+        self.blocks = arcade.SpriteList()
+        for i, text in enumerate(self.block_texts):
+            block = arcade.Sprite("CodeLockPrison/pixelated button bg.png", scale=1)
+            block.width = 450  # Set your desired width
+            block.height = 200  # Set your desired height
+            block.center_x = SCREEN_WIDTH * 0.55 + (i % 2) * 350
+            block.center_y = SCREEN_HEIGHT * 0.55 - (i // 2) * 50
+            block.index = i
+            block.text = text
+            self.blocks.append(block)
+
+    def on_draw(self):
+        self.clear()
+        arcade.draw_lrwh_rectangle_textured(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, self.background)
+
+        # drawing internship count + icon
+        self.internships_list.draw()
+        arcade.draw_text(num_internships, self.internships.center_x * 0.98, self.internships.center_y * 0.99,
+                         arcade.color.BLACK, font_size=15, font_name="Consolas")
+
+        # drawing hacking question
+        arcade.draw_text(
+            "A password is encoded in a special encryption. The original letters of the password are shifted forward in the alphabet by a value of S = p^2, where p is the position of the letter.",
+            SCREEN_WIDTH * 0.1, SCREEN_HEIGHT * 0.85, arcade.color.BLACK, font_size=10, multiline=True,
+            width=SCREEN_WIDTH * 0.75)
+        arcade.draw_text("Example: ‘CODEZ’ → DSMUY",
+                         SCREEN_WIDTH * 0.1, SCREEN_HEIGHT * 0.8, arcade.color.BLACK, font_size=10, multiline=True,
+                         width=SCREEN_WIDTH * 0.75)
+        arcade.draw_text(
+            "The letter ‘C’ is in the first position, so p = 1. This means S = 1^2 = 1. Shifting ‘C’ forward by 1 gives you ‘D’, because ‘D’ is the letter one position after ‘C’ in the alphabet",
+            SCREEN_WIDTH * 0.1, SCREEN_HEIGHT * 0.75, arcade.color.BLACK, font_size=10, multiline=True,
+            width=SCREEN_WIDTH * 0.75)
+        arcade.draw_text(
+            "If you end up shifting positions beyond ‘Z’, continue shifting positions starting from ‘A’, as if ‘A’ was the letter that followed ‘Z’",
+            SCREEN_WIDTH * 0.1, SCREEN_HEIGHT * 0.7, arcade.color.BLACK, font_size=10, multiline=True,
+            width=SCREEN_WIDTH * 0.75)
+        arcade.draw_text("You must create a program that can decode all the passwords",
+                         SCREEN_WIDTH * 0.1, SCREEN_HEIGHT * 0.65, arcade.color.BLACK, font_size=10, multiline=True,
+                         width=SCREEN_WIDTH * 0.75)
+
+
+        # drawing menu button
+        self.menu_list.draw()
+        self.back_list.draw()
+
+        # drawing submit button
+        self.submit_list.draw()
+
+        # drawing code blocks
+        self.blocks.draw()
+
+        # drawing text on code blocks
+        for block in self.blocks:
+            arcade.draw_text(block.text, block.center_x, block.center_y, arcade.color.WHITE, font_size=8,
+                             anchor_x="center", anchor_y="center", font_name="Consolas")
+        # drawing actual code
+        arcade.draw_text("Program", SCREEN_WIDTH * 0.1, SCREEN_HEIGHT * 0.6, arcade.color.BLACK, font_size=25,
+                         multiline=True, width=SCREEN_WIDTH * 0.75, font_name="Consolas")
+        arcade.draw_text("alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P','Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']",
+                         SCREEN_WIDTH * 0.1, SCREEN_HEIGHT * 0.55, arcade.color.BLACK, font_size=8,
+                         multiline=True, width=SCREEN_WIDTH * 0.25, font_name="Consolas")
+        arcade.draw_text("encoded_password = []", SCREEN_WIDTH * 0.1, SCREEN_HEIGHT * 0.45, arcade.color.BLACK, font_size=8,
+            multiline=True, width=SCREEN_WIDTH * 0.75, font_name="Consolas")
+        arcade.draw_text(self.code_display, SCREEN_WIDTH * 0.1, SCREEN_HEIGHT * 0.4, arcade.color.BLACK,
+                         font_size=10, multiline=True, width=SCREEN_WIDTH * 0.3, font_name="Consolas")
+
+    def on_mouse_press(self, x, y, button, key_modifiers):
+
+        # if menu button is clicked
+        back_buttons = arcade.get_sprites_at_point((x, y), self.back_list)
+        if len(back_buttons) > 0:
+            view = LevelView()
+            view.setup()
+            self.window.show_view(view)
+        # if menu button is clicked
+        menu_buttons = arcade.get_sprites_at_point((x, y), self.menu_list)
+        if len(menu_buttons) > 0:
+            view = MenuView()
+            view.setup()
+            self.window.show_view(view)
+        # if user clicks on code blocks
+        clicked_blocks = arcade.get_sprites_at_point((x, y), self.blocks)
+        if clicked_blocks:
+            clicked_block = clicked_blocks[0]
+            if clicked_block.index not in self.current_order:
+                # each block costs 20 internships
+                global num_internships
+                num_internships = str(int(num_internships) - 20)
+
+                # appending clicked code block to user's order
+                self.current_order.append(clicked_block.index)
+
+                # displaying the code of the clock clicked
+                self.code_display += clicked_block.text + "\n"
+
+        # checking answers
+        submit_option = arcade.get_sprites_at_point((x, y), self.submit_list)
+        if submit_option:
+            if self.current_order == self.correct_order:
+                global level
+                # gain internships for beating level
+                num_internships = str(int(num_internships) + (level * 100))
+
+                view = WinView()
+                view.setup()
+                self.window.show_view(view)
+            else:
+                view = HackLoseView()
+                view.setup()
+                self.window.show_view(view)
 
 class CombatGameOver(arcade.View):
     def __init__(self):
