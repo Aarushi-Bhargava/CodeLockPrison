@@ -558,7 +558,7 @@ class HackingView1(arcade.View):
         self.blocks = arcade.SpriteList()
         for i, text in enumerate(self.block_texts):
             block = arcade.Sprite("CodeLockPrison/pixelated button bg.png", scale=1)
-            block.width = 400  # Set your desired width
+            block.width = 500  # Set your desired width
             block.height = 200  # Set your desired height
             block.center_x = SCREEN_WIDTH * 0.75
             block.center_y = SCREEN_HEIGHT * 0.6 - (i / 2) * 150
@@ -674,7 +674,7 @@ class HackingView2(arcade.View):
         # code blocks
         self.blocks = []
         self.block_texts = [
-            "direction_sum = int(secret_code[0]) + int(secret_code[1])",  # Variable block
+            "direction_sum = secret_code[0]+secret_code[1]",  # Variable block
             "if direction_sum % 2 == 1:",  # If statement
             "num_steps = secret_code[2:]",  # Variable block (num_steps)
             "direction = 'right'",  # Variable block (direction)
@@ -766,7 +766,7 @@ class HackingView2(arcade.View):
         arcade.draw_text("Program", SCREEN_WIDTH * 0.1, SCREEN_HEIGHT * 0.65, arcade.color.BLACK, font_size=25,
                          multiline=True, width=SCREEN_WIDTH * 0.75, font_name="Consolas")
         arcade.draw_text(self.code_display, SCREEN_WIDTH * 0.1, SCREEN_HEIGHT * 0.55, arcade.color.BLACK,
-                         font_size=10, multiline=True, width=SCREEN_WIDTH * 0.3, font_name="Consolas")
+                         font_size=5, multiline=True, width=SCREEN_WIDTH * 0.3, font_name="Consolas")
 
     def on_mouse_press(self, x, y, button, key_modifiers):
 
